@@ -8,9 +8,10 @@ import * as typescript from "gulp-typescript";
 import * as sass from "gulp-sass";
 import * as sourcemaps from "gulp-sourcemaps";
 import * as autoprefixer from "gulp-autoprefixer";
-let processhtml = require("gulp-processhtml");
-let connect = require("gulp-connect");
-let open = "gulp-open";
+import * as processhtml from "gulp-processhtml";
+import * as connect from "gulp-connect";
+import * as open from "gulp-open";
+import * as minifyCss from "gulp-minify-css";
 
 const config = {
     styles: {
@@ -40,7 +41,7 @@ gulp.task("clean", (cb) => {
 
 gulp.task("copy", () => {
     return gulp.src(paths.assets)
-        .pipe(gulp.dest(paths.dist + "/assets"));
+        .pipe(gulp.dest(paths.dist "/assets"));
 });
 
 let tsProject = typescript.createProject({
