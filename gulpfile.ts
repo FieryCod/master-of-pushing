@@ -41,7 +41,7 @@ gulp.task("clean", (cb) => {
 
 gulp.task("copy", () => {
     return gulp.src(paths.assets)
-        .pipe(gulp.dest(paths.dist "/assets"));
+        .pipe(gulp.dest(paths.dist + "/assets"));
 });
 
 let tsProject = typescript.createProject({
