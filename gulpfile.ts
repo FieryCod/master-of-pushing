@@ -1,56 +1,73 @@
 import * as gulp from "gulp";
-import * as loadPlugins from "gulp-load-plugins";
 import * as concat from "gulp-concat-sourcemap";
 import * as deploy from "gulp-gh-pages";
 import * as del from "del";
 import * as runSequence from "run-sequence";
-import * as processhtml from "gulp-processhtml";
-import * as connect from "gulp-connect";
-import * as open from "gulp-open";
 import * as uglifyjs from "gulp-uglifyjs";
-import * as minifyCss from "gulp-minify-css";
+import * as typescript from "gulp-typescript";
+import * as sass from "gulp-sass";
+import * as sourcemaps from "gulp-sourcemaps";
+import * as autoprefixer from "gulp-autoprefixer";
+let processhtml = require("gulp-processhtml");
+let connect = require("gulp-connect");
+let open = "gulp-open";
 
-let $ = loadPlugins();
+const config = {
+    styles: {
+        sass: {
+            style: { outputStyle: "expanded" },
+            src: "public/stylesheets/*.scss",
+        },
+        prefixer: {
+            browsers: ["last 10 versions"],
+            cascade: false
+        },
+    }
+};
+
 const paths = {
     assets: "src/assets/**/*",
-    less: "src/scss/main.scss",
+    scss: "src/scss/main.scss",
     index: "src/index.html",
     ts: "src/scripts/**/*.ts",
     build: "build",
     dist: "dist"
 };
 
-gulp.task("clean", function (cb) {
+gulp.task("clean", (cb) => {
     return del([paths.build, paths.dist], cb);
 });
 
-gulp.task("copy", function () {
+gulp.task("copy", () => {
     return gulp.src(paths.assets)
         .pipe(gulp.dest(paths.dist + "/assets"));
 });
 
-var tsProject = $.typescript.createProject({
+let tsProject = typescript.createProject({
     declarationFiles: true,
     noExternalResolve: true,
     sortOutput: true,
-    sourceRoot: "../scripts"
+    sourceRoot: "src/scripts"
 });
 
-gulp.task("typescript", function () {
-    var tsResult = gulp.src(paths.ts)
-        .pipe($.sourcemaps.init())
-        .pipe($.typescript(tsProject));
+gulp.task("typescript", () => {
+    let tsResult = gulp.src(paths.ts)
+        .pipe(sourcemaps.init())
+        .pipe(typescript(tsProject));
 
     return tsResult.js
         .pipe(concat("main.js"))
-        .pipe($.sourcemaps.write())
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.build));
 });
 
-gulp.task("less", function () {
-    return gulp.src(paths.less)
-        .pipe($.less())
-        .pipe(gulp.dest(paths.build));
+gulp.task("scss", () => {
+    gulp.src(paths.scss).
+        pipe(sass(config.styles.sass).on("error", sass.logError)).
+        pipe(autoprefixer(config.styles.prefixer)).
+        pipe(gulp.dest(paths.build));
+
+
 });
 
 gulp.task("processhtml", () => {
@@ -71,7 +88,7 @@ gulp.task("reload", ["typescript"], () => {
 
 gulp.task("watch", () => {
     gulp.watch(paths.ts, ["typescript", "reload"]);
-    gulp.watch(paths.less, ["less", "reload"]);
+    gulp.watch(paths.scss, ["scss", "reload"]);
     gulp.watch(paths.index, ["reload"]);
 });
 
@@ -89,17 +106,12 @@ gulp.task("open", () => {
 });
 
 gulp.task("minifyJs", ["typescript"], () => {
-    var all = [].concat(paths.build + "/main.js");
+    let all = [].concat(paths.build + "/main.js");
     return gulp.src(all)
         .pipe(uglifyjs("all.min.js", { outSourceMap: false }))
         .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task("minifyCss", ["less"], () => {
-    return gulp.src(paths.build + "/main.css")
-        .pipe(minifyCss())
-        .pipe(gulp.dest(paths.dist));
-});
 
 gulp.task("deploy", () => {
     return gulp.src("dist/**/*")
@@ -107,8 +119,8 @@ gulp.task("deploy", () => {
 });
 
 gulp.task("default", () => {
-    runSequence("clean", ["inject", "typescript", "less", "connect", "watch"], "open");
+    runSequence("clean", ["inject", "typescript", "scss", "connect", "watch"], "open");
 });
 gulp.task("build", () => {
-    return runSequence("clean", ["copy", "minifyJs", "minifyCss", "processhtml"]);
+    return runSequence("clean", ["copy", "minifyJs", "processhtml"]);
 });
