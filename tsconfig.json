@@ -1,18 +1,30 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": false
-  },
-  "exclude": [
-    "node_modules"
-  ],
-  "files": [
-    "node_modules/phaser/typescript/*.ts",
-    "src/scripts/**/*.ts"
-  ]
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "removeComments": false,
+        "noImplicitAny": false,
+        "outDir": "build",
+        "rootDir":"."
+    },
+    "files": [
+        "gulpfile.ts",
+        "src/scripts/Game.ts",
+        "src/scripts/state/Preload.ts",
+        "src/scripts/state/Main.ts",
+        "src/scripts/state/Boot.ts",
+        "node_modules/phaser/typescript/phaser.d.ts",
+        "node_modules/phaser/typescript/p2.d.ts",
+        "node_modules/phaser/typescript/pixi.d.ts",
+        "node_modules/phaser/typescript/phaser.comments.d.ts"
+    ],
+    "compileOnSave": false,
+    "exclude": [
+        "node_modules/**"
+    ]
+
 }

@@ -1,31 +1,60 @@
 {
-  "name": "pushmaster",
-  "version": "0.0.0",
+  "name": "master-of-pushing",
+  "description": "Try to stuff your opponents from the board.",
+  "version": "v0.0.0",
+  "keywords": [
+    "Airconsole, Phaser, Games"
+  ],
   "dependencies": {
-    "phaser": "2.6.2",
-    "typescript": "^2.1.4"
+    "@types/gulp": "^3.8.32",
+    "@types/gulp-load-plugins": "0.0.28",
+    "phaser": "2.6.2"
   },
   "devDependencies": {
-    "bower": "*",
-    "del": "*",
-    "gulp": "*",
-    "gulp-concat": "*",
-    "gulp-concat-sourcemap": "*",
-    "gulp-connect": "*",
-    "gulp-gh-pages": "*",
-    "gulp-inject": "*",
-    "gulp-less": "*",
-    "gulp-load-plugins": "*",
-    "gulp-minify-css": "*",
-    "gulp-minify-html": "*",
-    "gulp-open": "*",
-    "gulp-processhtml": "*",
-    "gulp-sourcemaps": "*",
-    "gulp-typescript": "*",
-    "gulp-uglifyjs": "*",
-    "gulp-util": "*",
-    "gulp-watch": "*",
-    "main-bower-files": "*",
-    "run-sequence": "*"
-  }
+    "@types/del": "^2.2.31",
+    "@types/gulp-gh-pages": "0.0.29",
+    "@types/run-sequence": "0.0.28",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-concat-sourcemap": "^1.3.1",
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-load-plugins": "^1.4.0",
+    "run-sequence": "^1.2.2",
+    "ts-node": "^2.0.0",
+    "tslint": "^4.2.0",
+    "typescript": "^2.1.4"
+  },
+  "contributors": [
+    {
+      "name": "Karol Wójcik",
+      "email": "kwcharllie379@gmail.com",
+      "web": "https://github.com/FieryCod"
+    },
+    {
+      "name": "Tomasz Kulpa",
+      "email": "tekulp@gmail.com",
+      "web": "https://github.com/tkulpa"
+    },
+    {
+      "name": "Krzysztof Buchacz",
+      "email": "kbuchacz@gmail.com",
+      "web": "https://github.com/kbuchacz"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/FieryCod/master-of-pushing/issues",
+    "email": "kwcharllie379@gmail.com"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/FieryCod/master-of-pushing.git"
+    }
+  ],
+  "licenses": [
+    {
+      "name": "ISC",
+      "url": "https://www.isc.org/downloads/software-support-policy/isc-license/"
+    }
+  ]
 }

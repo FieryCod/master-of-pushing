@@ -1,13 +1,11 @@
-module Pushmaster.State {
-  export class Preload extends Phaser.State {
-    private preloadBar:Phaser.Sprite;
+namespace Pushmaster.State {
+    export class Preload extends Phaser.State {
+        private preloadBar: Phaser.Sprite;
+        preload() {
 
-    preload() {
-      
+        }
+        create() {
+            this.game.state.start("main");
+        }
     }
-
-    create() {
-      this.game.state.start('main');
-    }
-  }
 }

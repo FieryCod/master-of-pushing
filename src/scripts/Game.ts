@@ -1,18 +1,12 @@
-module Pushmaster {
-  export class Game extends Phaser.Game {
-    constructor() {
-      super({
-        width: 800,
-        height: 600,
-        transparent: false,
-        enableDebug: true
-      });
+namespace Pushmaster {
+    export class Game extends Phaser.Game {
+        constructor() {
+            super(800, 600, Phaser.AUTO, "", null, false, true, null);
+            this.state.add("boot", State.Boot);
+            this.state.add("preload", State.Preload);
+            this.state.add("main", State.Main);
+            this.state.start("boot");
 
-      this.state.add('boot', State.Boot);
-      this.state.add('preload', State.Preload);
-      this.state.add('main', State.Main);
-
-      this.state.start('boot');
+        }
     }
-  }
 }
