@@ -4,7 +4,7 @@ namespace Pushmaster.State {
 
     }
     create() {
-      this.game.stage.backgroundColor = 0xFFFFFF;
+      this.game.stage.backgroundColor = 0x000000;
 
       this.input.maxPointers = 1;
       this.stage.disableVisibilityChange = true;

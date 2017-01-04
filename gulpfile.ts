@@ -40,7 +40,7 @@ gulp.task("clean", (cb) => {
 
 gulp.task("copy", () => {
     return gulp.src(paths.assets)
-        .pipe(gulp.dest(paths.dist + "/assets"));
+        .pipe(gulp.dest(paths.build + "/assets"));
 });
 
 let tsProject = typescript.createProject({
@@ -120,7 +120,7 @@ gulp.task("deploy", () => {
 });
 
 gulp.task("default", () => {
-    runSequence("clean", ["inject", "typescript", "scss", "connect", "watch"], "open");
+    runSequence("clean", ["inject", "typescript", "scss", "copy", "connect", "watch"], "open");
 });
 gulp.task("build", () => {
     return runSequence("clean", ["copy", "minifyJs", "processhtml"]);
