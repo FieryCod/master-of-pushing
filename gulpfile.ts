@@ -1,17 +1,16 @@
 import * as gulp from "gulp";
 import * as concat from "gulp-concat-sourcemap";
 import * as deploy from "gulp-gh-pages";
-import * as del from "del";
 import * as runSequence from "run-sequence";
 import * as uglifyjs from "gulp-uglifyjs";
 import * as typescript from "gulp-typescript";
 import * as sass from "gulp-sass";
 import * as sourcemaps from "gulp-sourcemaps";
 import * as autoprefixer from "gulp-autoprefixer";
-import * as processhtml from "gulp-processhtml";
-import * as connect from "gulp-connect";
-import * as open from "gulp-open";
-import * as minifyCss from "gulp-minify-css";
+let del = require("del");
+let processhtml = require("gulp-processhtml");
+let connect = require("gulp-connect");
+let open = require("gulp-open");
 
 const config = {
     styles: {
@@ -46,15 +45,16 @@ gulp.task("copy", () => {
 
 let tsProject = typescript.createProject({
     declarationFiles: true,
-    noExternalResolve: true,
-    sortOutput: true,
-    sourceRoot: "src/scripts"
+    noResolve: false
 });
 
 gulp.task("typescript", () => {
     let tsResult = gulp.src(paths.ts)
         .pipe(sourcemaps.init())
-        .pipe(typescript(tsProject));
+        .pipe(tsProject());
+
+    gulp.src("node_modules/phaser-ce/build/phaser.min.js")
+        .pipe(gulp.dest(paths.build));
 
     return tsResult.js
         .pipe(concat("main.js"))
