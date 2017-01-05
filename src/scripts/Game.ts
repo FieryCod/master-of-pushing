@@ -12,5 +12,8 @@ namespace Pushmaster {
             this.state.start("boot");
 
         }
+        returnSth() {
+            return 5;
+        }
     }
 }
