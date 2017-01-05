@@ -28,9 +28,9 @@ const config = {
 const paths = {
     assets: "src/assets/**/*",
     scss: "src/scss/main.scss",
-    index: "src/index.html",
+    index: "index.html",
     ts: "src/scripts/**/*.ts",
-    build: "build",
+    build: "build/",
     dist: "dist"
 };
 
@@ -39,6 +39,8 @@ gulp.task("clean", (cb) => {
 });
 
 gulp.task("copy", () => {
+    gulp.src("src/" + paths.index)
+        .pipe(gulp.dest(paths.build));
     return gulp.src(paths.assets)
         .pipe(gulp.dest(paths.build + "/assets"));
 });
@@ -72,40 +74,37 @@ gulp.task("scss", () => {
 });
 
 gulp.task("processhtml", () => {
-    return gulp.src(paths.index)
+    return gulp.src(paths.build + paths.index)
         .pipe(processhtml())
-        .pipe(gulp.dest(paths.dist));
+        .pipe(gulp.dest(paths.build));
 });
 
-gulp.task("inject", () => {
-    return gulp.src(paths.index)
-        .pipe(gulp.dest("src"));
-});
 
 gulp.task("reload", ["typescript"], () => {
-    gulp.src(paths.index)
+    gulp.src(paths.build + paths.index)
         .pipe(connect.reload());
 });
 
-gulp.task("watch", () => {
-    gulp.watch(paths.ts, ["typescript", "reload"]);
-    gulp.watch(paths.scss, ["scss", "reload"]);
-    gulp.watch(paths.index, ["reload"]);
-});
+
 
 gulp.task("connect", () => {
     connect.server({
-        root: [__dirname + "/src", paths.build],
+        root: [__dirname, paths.build],
         port: 9000,
         livereload: true
     });
 });
 
 gulp.task("open", () => {
-    gulp.src(paths.index)
-        .pipe(open("", { url: "http://localhost:9000" }));
+    gulp.src(paths.build + paths.index)
+        .pipe(open({ uri: "http://localhost:9000" }));
 });
-
+gulp.task("watch", () => {
+    gulp.watch(paths.assets, ["copy"]);
+    gulp.watch(paths.ts, ["typescript", "reload"]);
+    gulp.watch(paths.scss, ["scss", "reload"]);
+    gulp.watch(paths.index, ["reload"]);
+});
 gulp.task("minifyJs", ["typescript"], () => {
     let all = [].concat(paths.build + "/main.js");
     return gulp.src(all)
@@ -120,7 +119,7 @@ gulp.task("deploy", () => {
 });
 
 gulp.task("default", () => {
-    runSequence("clean", ["inject", "typescript", "scss", "copy", "connect", "watch"], "open");
+    runSequence("clean", ["copy", "typescript", "scss", "connect", "watch"], "open");
 });
 gulp.task("build", () => {
     return runSequence("clean", ["copy", "minifyJs", "processhtml"]);

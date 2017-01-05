@@ -3,21 +3,22 @@ namespace Pushmaster.State {
         private preloadBar: Phaser.Text;
         private loadingPercentage: number = 0;
         preload() {
-          this.load.crossOrigin = "Anonymous";
+            this.game.load.onLoadStart.add(this.loadStart, this);
+            this.game.load.onFileComplete.add(this.updateProgress, this);
             this.game.load.image("bradberry", "assets/bradberry.jpg");
-        }
-        update() {
-            // this.loadingPercentage = this.game.load.progress;
-            // this.preloadBar.setText(`Loading ${this.loadingPercentage}%`);
-
+            this.game.load.image("cat", "assets/cat.png");
+                this.game.load.image("lol", "assets/lol.jpg");
         }
         loadStart() {
-
+            console.log(this.load.progress);
+        }
+        updateProgress() {
+            console.log(this.load.progress);
         }
         create() {
-          this.game.add.sprite(0, 0, "bradberry");
-            // this.game.load.onLoadStart.add(this.loadStart, this);
-            // this.game.state.start("main");
+
+
+            this.game.state.start("main");
         }
     }
 }
