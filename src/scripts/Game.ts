@@ -1,7 +1,6 @@
 /// <reference path="../../node_modules/phaser-ce/typescript/pixi.d.ts" />
 /// <reference path="../../node_modules/phaser-ce/typescript/p2.d.ts" />
 /// <reference path="../../node_modules/phaser-ce/typescript/phaser.d.ts" />
-
 namespace Pushmaster {
     export class Game extends Phaser.Game {
         constructor() {
