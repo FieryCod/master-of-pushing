@@ -1,20 +1,18 @@
 import * as gulp from "gulp";
-import * as concat from "gulp-concat-sourcemap";
 import * as deploy from "gulp-gh-pages";
 import * as runSequence from "run-sequence";
 import * as uglifyjs from "gulp-uglifyjs";
 import * as typescript from "gulp-typescript";
 import * as sass from "gulp-sass";
-import * as sourcemaps from "gulp-sourcemaps";
 import * as autoprefixer from "gulp-autoprefixer";
 let del = require("del");
 let processhtml = require("gulp-processhtml");
 let connect = require("gulp-connect");
 let open = require("gulp-open");
-let wrapCommonjs = require("gulp-wrap-commonjs");
 let browserify = require("browserify");
 let tsify = require("tsify");
-let source = require('vinyl-source-stream');
+let source = require("vinyl-source-stream");
+
 const config = {
     styles: {
         sass: {
@@ -55,10 +53,11 @@ let tsProject = typescript.createProject({
 
 gulp.task("typescript", () => {
     return browserify({
-        basedir: '.',
-        entries: ['src/scripts/App.ts'],
+        basedir: ".",
+        entries: ["src/scripts/App.ts"],
         cache: {},
-        packageCache: {}
+        packageCache: {},
+        debug: true
     })
         .plugin(tsify)
         .bundle()
