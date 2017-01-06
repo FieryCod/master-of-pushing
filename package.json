@@ -21,6 +21,7 @@
     "@types/gulp-typescript": "0.0.32",
     "@types/gulp-uglify": "0.0.29",
     "@types/run-sequence": "0.0.28",
+    "browserify": "13.3.0",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
@@ -38,6 +39,7 @@
     "mocha-typescript": "^1.0.15",
     "run-sequence": "^1.2.2",
     "ts-node": "^2.0.0",
+    "tsify": "3.0.0",
     "tslint": "^4.2.0",
     "typescript": "^2.2.0-dev.20170104"
   },

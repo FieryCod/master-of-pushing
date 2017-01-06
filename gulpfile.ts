@@ -12,6 +12,8 @@ let processhtml = require("gulp-processhtml");
 let connect = require("gulp-connect");
 let open = require("gulp-open");
 let wrapCommonjs = require("gulp-wrap-commonjs");
+let browserify = require("browserify");
+let tsify = require("tsify");
 const config = {
     styles: {
         sass: {
@@ -51,18 +53,15 @@ let tsProject = typescript.createProject({
 });
 
 gulp.task("typescript", () => {
-    let tsResult = gulp.src(paths.ts)
-        .pipe(sourcemaps.init())
-        .pipe(tsProject());
-
-    gulp.src("node_modules/phaser-ce/build/phaser.min.js")
-        .pipe(gulp.dest(paths.build));
-
-    return tsResult.js
-        .pipe(wrapCommonjs({ autoRequire: true }))
-        .pipe(concat("main.js"))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest(paths.build));
+    return browserify({
+        basedir: '.',
+        entries: ['src/scripts/App.ts'],
+        cache: {},
+        packageCache: {}
+    })
+        .plugin(tsify)
+        .bundle()
+        .pipe(gulp.dest("dist"));
 });
 
 gulp.task("scss", () => {
