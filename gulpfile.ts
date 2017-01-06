@@ -14,6 +14,7 @@ let open = require("gulp-open");
 let wrapCommonjs = require("gulp-wrap-commonjs");
 let browserify = require("browserify");
 let tsify = require("tsify");
+let source = require('vinyl-source-stream');
 const config = {
     styles: {
         sass: {
@@ -61,7 +62,8 @@ gulp.task("typescript", () => {
     })
         .plugin(tsify)
         .bundle()
-        .pipe(gulp.dest("dist"));
+        .pipe(source("main.js"))
+        .pipe(gulp.dest(paths.build));
 });
 
 gulp.task("scss", () => {
