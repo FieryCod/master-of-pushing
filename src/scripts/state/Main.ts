@@ -3,15 +3,12 @@ export class Main extends Phaser.State {
     private cursors: Phaser.CursorKeys;
     create() {
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        this.game.load.spritesheet('ship', 'assets/sprites/humstar.png', 32, 32);
-        this.game.load.image("cat", "assets/cat.png");
-        this.game.load.image("lol", "assets/lol.jpg");
-        this.game.add.sprite(0, 0, "bradberry");
-        this.ship = this.game.add.sprite(0, 0, 'ship');
+        this.game.load.spritesheet("ship", "assets/sprites/humstar.png", 32, 32);
+        this.ship = this.game.add.sprite(0, 0, "ship");
         this.ship.scale.set(2);
         this.ship.smoothed = false;
-        this.ship.animations.add('fly', [0, 1, 2, 3, 4, 5], 10, true);
-        this.ship.play('fly');
+        this.ship.animations.add("fly", [0, 1, 2, 3, 4, 5], 10, true);
+        this.ship.play("fly");
         this.initPhysics();
     }
     initPhysics() {

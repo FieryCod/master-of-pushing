@@ -4,7 +4,7 @@ export class Preload extends Phaser.State {
     preload() {
         this.game.load.onLoadStart.add(this.loadStart, this);
         this.game.load.onFileComplete.add(this.updateProgress, this);
-        this.game.load.spritesheet('ship', 'assets/sprites/humstar.png', 32, 32);
+        this.game.load.spritesheet("ship", "assets/sprites/humstar.png", 32, 32);
 
     }
     loadStart() {
