@@ -5,9 +5,7 @@
   "keywords": [
     "Airconsole, Phaser, Games"
   ],
-  "dependencies": {
-    "phaser-ce": "2.7.2"
-  },
+  "dependencies": {},
   "scripts": {
     "start": "gulp",
     "test": "mocha-typescript-watch -p test/tsconfig.json"
@@ -34,6 +32,7 @@
     "install": "0.8.4",
     "mocha": "3.2.0",
     "mocha-typescript": "1.0.15",
+    "phaser": "^2.6.2",
     "run-sequence": "1.2.2",
     "ts-node": "2.0.0",
     "tsify": "3.0.0",

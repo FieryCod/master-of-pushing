@@ -1,3 +1,5 @@
+import { Player } from "../classes/Player";
+
 export class Main extends Phaser.State {
     private roundsNum: number;
     private const START_POS_EDGE_OFFSET: number = 50;
@@ -12,6 +14,7 @@ export class Main extends Phaser.State {
         this.roundsNum = roundsNum || 2;
         this.players = new Phaser.Group(this.game);
         this.cursors = this.game.input.keyboard.createCursorKeys();
+<<<<<<< 59d9228b189d4e2d9b40e0af2e3ea9ff1d102c3f
     }
     create() {
         this.setupArena();
@@ -22,6 +25,17 @@ export class Main extends Phaser.State {
         this.addPlayer("Player4");
         this.addPlayer("Player5");
         this.addPlayer("Player6");
+=======
+        this.game.load.spritesheet("ship", "assets/sprites/humstar.png", 32, 32);
+        this.game.load.image("cat", "assets/cat.png");
+        this.game.load.image("lol", "assets/lol.jpg");
+        this.game.add.sprite(0, 0, "bradberry");
+        this.ship = this.game.add.sprite(0, 0, "ship");
+        this.ship.scale.set(2);
+        this.ship.smoothed = false;
+        this.ship.animations.add("fly", [0, 1, 2, 3, 4, 5], 10, true);
+        this.ship.play("fly");
+>>>>>>> Adding option menu
         this.initPhysics();
         this.placePlayersAtStartingPos();
     }

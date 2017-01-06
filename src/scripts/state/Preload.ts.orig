@@ -1,0 +1,23 @@
+export class Preload extends Phaser.State {
+    private preloadBar: Phaser.Text;
+    private loadingPercentage: number = 0;
+    preload() {
+        this.game.load.onLoadStart.add(this.loadStart, this);
+        this.game.load.onFileComplete.add(this.updateProgress, this);
+<<<<<<< 59d9228b189d4e2d9b40e0af2e3ea9ff1d102c3f
+=======
+        this.game.load.bitmapFont("carrier_command", "assets/fonts/bitmapFonts/carrier_command.png", "assets/fonts/bitmapFonts/carrier_command.xml");
+>>>>>>> Adding option menu
+        this.game.load.spritesheet("ship", "assets/sprites/humstar.png", 32, 32);
+
+    }
+    loadStart() {
+        console.log(this.load.progress);
+    }
+    updateProgress() {
+        console.log(this.load.progress);
+    }
+    create() {
+        this.game.state.start("menu");
+    }
+}
