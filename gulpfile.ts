@@ -11,7 +11,7 @@ let del = require("del");
 let processhtml = require("gulp-processhtml");
 let connect = require("gulp-connect");
 let open = require("gulp-open");
-
+let wrapCommonjs = require("gulp-wrap-commonjs");
 const config = {
     styles: {
         sass: {
@@ -59,6 +59,7 @@ gulp.task("typescript", () => {
         .pipe(gulp.dest(paths.build));
 
     return tsResult.js
+        .pipe(wrapCommonjs({ autoRequire: true }))
         .pipe(concat("main.js"))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(paths.build));

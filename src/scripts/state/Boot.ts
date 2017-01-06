@@ -1,4 +1,3 @@
-namespace Pushmaster.State {
   export class Boot extends Phaser.State {
     preload() {
 
@@ -12,4 +11,3 @@ namespace Pushmaster.State {
       this.game.state.start("preload");
     }
   }
-}

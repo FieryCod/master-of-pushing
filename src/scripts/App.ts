@@ -1,3 +1,4 @@
+import {Game} from "./Game";
 window.onload = function() {
-    const game = new Pushmaster.Game();
+    const game = new Game();
 };

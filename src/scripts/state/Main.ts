@@ -1,9 +1,7 @@
-namespace Pushmaster.State {
-    export class Main extends Phaser.State {
-        create() {
+export class Main extends Phaser.State {
+    create() {
 
-            this.game.add.sprite(0, 0, "bradberry");
+        this.game.add.sprite(0, 0, "bradberry");
 
-        }
     }
 }
