@@ -4,17 +4,16 @@
 import {Boot} from "./state/Boot";
 import {Main} from "./state/Main";
 import {Preload} from "./state/Preload";
+
 export class Game extends Phaser.Game {
     constructor() {
 
-        super(800, 600, Phaser.AUTO, "", null, false, true, null);
+        super("100%", "100%", Phaser.AUTO, "", null, false, true, null);
         this.state.add("boot", Boot);
         this.state.add("preload", Preload);
         this.state.add("main", Main);
         this.state.start("boot");
 
     }
-    returnSth() {
-        return 5;
-    }
+  
 }

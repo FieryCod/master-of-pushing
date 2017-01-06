@@ -8,15 +8,9 @@
         "removeComments": false,
         "noImplicitAny": false,
         "rootDir": "."
+
     },
     "files": [
-        "../node_modules/phaser-ce/typescript/pixi.d.ts",
-        "../node_modules/phaser-ce/typescript/p2.d.ts",
-        "../node_modules/phaser-ce/typescript/phaser.d.ts",
-        "../src/scripts/Game.ts",
-        "../src/scripts/state/Preload.ts",
-        "../src/scripts/state/Main.ts",
-        "../src/scripts/state/Boot.ts",
         "Game.test.ts"
 
     ],
