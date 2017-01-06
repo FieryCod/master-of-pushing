@@ -6,7 +6,7 @@ export class Main extends Phaser.State {
     private cursors: Phaser.CursorKeys;
     private arena: Phaser.Circle;
     create() {
-        this.arena = new Phaser.Circle(500, 500, 900);
+        this.arena = new Phaser.Circle(450, 450, 900);
         let graphics = this.game.add.graphics(this.arena.x, this.arena.y);
         graphics.beginFill(0xadd8e6, 1);
         graphics.drawCircle(0, 0, this.arena.diameter);
@@ -17,7 +17,7 @@ export class Main extends Phaser.State {
         this.addPlayer("Player3");
         this.addPlayer("Player4");
         this.addPlayer("Player5");
-        // this.addPlayer("Player6");
+        this.addPlayer("Player6");
         this.initPhysics();
         this.placePlayersAtStartingPos();
     }
@@ -53,9 +53,9 @@ export class Main extends Phaser.State {
         let degreesOffset = 360 / positions;
         let angle;
         for (let i = 0; i < positions; i++) {
-            angle = (i + 1) * degreesOffset;
-            this.players[i].body.x = this.players[i].startingPosition.x = this.arena.x + (this.arena.radius - this.START_POS_EDGE_OFFSET) * Math.cos(angle);
-            this.players[i].body.y = this.players[i].startingPosition.y = this.arena.y + (this.arena.radius - this.START_POS_EDGE_OFFSET) * Math.sin(angle);
+            angle = i * degreesOffset;
+            this.players[i].body.x = this.players[i].startingPosition.x = this.arena.x + (this.arena.radius - this.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
+            this.players[i].body.y = this.players[i].startingPosition.y = this.arena.y + (this.arena.radius - this.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
         }
     };
     update() {
