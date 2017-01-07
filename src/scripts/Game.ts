@@ -4,16 +4,17 @@
 import {Boot} from "./state/Boot";
 import {Main} from "./state/Main";
 import {Preload} from "./state/Preload";
-import {Menu} from "./state/Menu";
-
+import {MainMenu} from "./state/MainMenu";
+import {Credits} from "./state/Credits";
 export class Game extends Phaser.Game {
     constructor() {
 
         super("100%", "100%", Phaser.AUTO, "", null, false, true, null);
         this.state.add("boot", Boot);
         this.state.add("preload", Preload);
-        this.state.add("menu", Menu);
-         this.state.add("main", Main);
+        this.state.add("menu", MainMenu);
+        this.state.add("main", Main);
+        this.state.add("credits",Credits);
         this.state.start("boot");
 
     }
