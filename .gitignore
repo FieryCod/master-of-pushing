@@ -3,6 +3,7 @@
 node_modules/
 vendor/
 .idea/
+.vscode/
 *.iml
 build/
 dist/
