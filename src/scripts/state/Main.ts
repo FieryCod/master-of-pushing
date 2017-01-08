@@ -66,17 +66,17 @@ export class Main extends Phaser.State {
         });
 
         if (this.cursors.left.isDown) {
-            this.players[0].body.moveLeft(100);
+            this.players[0].body.velocity.x -= 5;
         }
         else if (this.cursors.right.isDown) {
-            this.players[0].body.moveRight(100);
+            this.players[0].body.velocity.x += 5;
         }
 
         if (this.cursors.up.isDown) {
-            this.players[0].body.moveUp(100);
+            this.players[0].body.velocity.y -= 5;
         }
         else if (this.cursors.down.isDown) {
-            this.players[0].body.moveDown(100);
+            this.players[0].body.velocity.y += 5;
         }
     }
     playerDied(player) {
