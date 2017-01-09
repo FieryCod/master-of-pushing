@@ -5,6 +5,7 @@ export class Preload extends Phaser.State {
         this.game.load.onLoadStart.add(this.loadStart, this);
         this.game.load.onFileComplete.add(this.updateProgress, this);
         this.game.load.spritesheet("ship", "assets/sprites/humstar.png", 32, 32);
+        this.game.load.bitmapFont("carrier_command", "assets/fonts/bitmapFonts/carrier_command.png", "assets/fonts/bitmapFonts/carrier_command.xml");
 
     }
     loadStart() {
@@ -14,6 +15,6 @@ export class Preload extends Phaser.State {
         console.log(this.load.progress);
     }
     create() {
-        this.game.state.start("main");
+        this.game.state.start("menu");
     }
 }

@@ -8,13 +8,13 @@ export class MenuOption {
         this.optionText.stroke = "rgba(0,0,0,0)";
         this.optionText.strokeThickness = 4;
         this.optionText.inputEnabled = true;
-        this.optionText.events.onInputUp.add(callback,this);
-        this.optionText.events.onInputOver.add(this.onOver,this);
-        this.optionText.events.onInputOut.add(this.onOut,this);
+        this.optionText.events.onInputUp.add(callback, this);
+        this.optionText.events.onInputOver.add(this.onOver, this);
+        this.optionText.events.onInputOut.add(this.onOut, this);
     }
-    public makeActive(){
-      this.optionText.fill = this.activeColor;
-      this.optionText.stroke = "rgba(245, 2, 2, 0.7)";
+    public makeActive() {
+        this.optionText.fill = this.activeColor;
+        this.optionText.stroke = "rgba(245, 2, 2, 0.7)";
     }
     private onOver(target) {
         target.fill = this.activeColor;

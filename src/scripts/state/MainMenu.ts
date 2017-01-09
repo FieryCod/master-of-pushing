@@ -28,7 +28,7 @@ export class MainMenu extends Phaser.State {
         };
 
     }
-     create() {
+    create() {
         this.addOption("Start", () => {
             this.game.state.start("main");
         });
@@ -36,7 +36,7 @@ export class MainMenu extends Phaser.State {
         this.addOption("Options", function() {
             this.game.state.start("options");
         });
-        this.addOption("Credits",()=>{
+        this.addOption("Credits", () => {
             this.game.state.start("credits");
         });
     }
