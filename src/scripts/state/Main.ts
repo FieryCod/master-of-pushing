@@ -1,17 +1,19 @@
 import { Player } from "../classes/Player";
+const START_POS_EDGE_OFFSET: number = 50;
+const DEFAULT_ANIMATION_PLAYER: string = "fly";
+const PLAYER_SPRITESHEET: string = "ship";
+const PLAYER_COLLISION_SIZE: number = 28;
+const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
 export class Main extends Phaser.State {
-    private roundsNum: number;
-    private const START_POS_EDGE_OFFSET: number = 50;
-    private const DEFAULT_ANIMATION_PLAYER: string = "fly";
-    private const PLAYER_SPRITESHEET: string = "ship";
-    private const PLAYER_COLLISION_SIZE: number = 28;
-    private const TEMP_ARENA_COLOR: number = 0xadd8e6;
+    private rounds: number;
+    private currentRound: number;
     private players: Phaser.Group;
     private cursors: Phaser.CursorKeys;
     private arena: Phaser.Circle;
-    init(roundsNum: number) {
-        this.roundsNum = roundsNum || 2;
+    init(rounds: number) {
+        this.rounds = rounds || 3;
+        this.currentRound = 1;
         this.players = new Phaser.Group(this.game);
         this.cursors = this.game.input.keyboard.createCursorKeys();
     }
@@ -31,7 +33,7 @@ export class Main extends Phaser.State {
         this.arena = new Phaser.Circle(450, 450, 900);
         // TODO: Replace temp graphic for arena
         let graphics = this.game.add.graphics(this.arena.x, this.arena.y);
-        graphics.beginFill(this.TEMP_ARENA_COLOR, 1);
+        graphics.beginFill(TEMP_ARENA_COLOR, 1);
         graphics.drawCircle(0, 0, this.arena.diameter);
         // --
     }
@@ -42,7 +44,7 @@ export class Main extends Phaser.State {
         this.players.forEach(player => {
             this.game.physics.p2.enable(player, false);
             let playerCollisionGroup = this.game.physics.p2.createCollisionGroup();
-            player.body.setCircle(this.PLAYER_COLLISION_SIZE);
+            player.body.setCircle(PLAYER_COLLISION_SIZE);
             player.body.setCollisionGroup(playerCollisionGroup);
             playerCollisionGroups.push(playerCollisionGroup);
         }, this);
@@ -50,13 +52,13 @@ export class Main extends Phaser.State {
         this.players.forEach(p => p.body.collides(playerCollisionGroups, this.playersCollideCallback), this);
     }
     addPlayer(name: string) {
-        let player = new Player(this.game, this.arena.x, this.arena.y, this.PLAYER_SPRITESHEET);
+        let player = new Player(this.game, this.arena.x, this.arena.y, PLAYER_SPRITESHEET);
         player.name = name;
         player.scale.set(2);
         player.anchor.x = player.anchor.y = 0.5;
         player.smoothed = false;
-        player.animations.add(this.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
-        player.play(this.DEFAULT_ANIMATION_PLAYER);
+        player.animations.add(DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
+        player.play(DEFAULT_ANIMATION_PLAYER);
         this.players.add(player);
     }
     placePlayersAtStartingPos() {
@@ -67,8 +69,8 @@ export class Main extends Phaser.State {
         for (let i = 0; i < positions; ++i) {
             angle = i * degreesOffset;
             player = this.players.getChildAt(i) as Player;
-            player.body.x = player.startingPosition.x = this.arena.x + (this.arena.radius - this.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
-            player.body.y = player.startingPosition.y = this.arena.y + (this.arena.radius - this.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
+            player.body.x = player.startingPosition.x = this.arena.x + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
+            player.body.y = player.startingPosition.y = this.arena.y + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
             player.body.setZeroVelocity();
         }
     };
@@ -96,10 +98,20 @@ export class Main extends Phaser.State {
     playerDied(player: Player) {
         player.kill();
         if (this.players.countLiving() === 1) {
-            this.playerWon(this.players.getFirstAlive());
+            this.roundEnded();
         }
     }
-    playerWon(player: Player) {
+    roundEnded() {
+        let roundSurvivor = this.players.getFirstAlive();
+        ++roundSurvivor.points;
+        if (this.currentRound >= this.rounds) {
+            // TODO: Finish game and redirect to score screen;
+        } else {
+            this.nextRound();
+        }
+    }
+    nextRound() {
+        ++this.currentRound;
         this.placePlayersAtStartingPos();
         this.players.callAll("revive", null);
     }
