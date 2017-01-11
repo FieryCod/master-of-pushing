@@ -20,8 +20,6 @@ export class Credits extends Phaser.State {
                 position: "Programmer", name: "Tomasz Kulpa"
             }
         ];
-
-
     }
     create() {
         for (let i in this.devs) {
