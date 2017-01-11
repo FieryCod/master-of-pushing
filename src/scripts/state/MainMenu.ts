@@ -24,7 +24,8 @@ export class MainMenu extends Phaser.State {
         this.textOptions = {
             font: "30pt carrier_command",
             fill: "white", align: "center",
-            stroke: "rgba(0,0,0,0)", strokeThickness: 4
+            stroke: "rgba(0,0,0,0)",
+            strokeThickness: 4
         };
 
     }
