@@ -27,7 +27,8 @@ export class Main extends Phaser.State {
         this.addPlayer("Player5");
         this.addPlayer("Player6");
         this.initPhysics();
-        this.placePlayersAtStartingPos();
+        this.assignStartPositionsToPlayers();
+        this.players.callAll("postionAtStart", null);
     }
     setupArena() {
         this.arena = new Phaser.Circle(450, 450, 900);
@@ -61,7 +62,7 @@ export class Main extends Phaser.State {
         player.play(DEFAULT_ANIMATION_PLAYER);
         this.players.add(player);
     }
-    placePlayersAtStartingPos() {
+    assignStartPositionsToPlayers () {
         let positions: number = this.players.length;
         let degreesOffset: number = 360 / positions;
         let angle: number;
@@ -69,14 +70,13 @@ export class Main extends Phaser.State {
         for (let i = 0; i < positions; ++i) {
             angle = i * degreesOffset;
             player = this.players.getChildAt(i) as Player;
-            player.body.x = player.startingPosition.x = this.arena.x + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
-            player.body.y = player.startingPosition.y = this.arena.y + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
-            player.body.setZeroVelocity();
+            player.startPosition.x = this.arena.x + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.cos(Phaser.Math.degToRad(angle));
+            player.startPosition.y = this.arena.y + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.sin(Phaser.Math.degToRad(angle));
         }
     };
     update() {
         this.players.forEachAlive(player => {
-            if (!this.arena.contains(player.centerX, player.centerY)) {
+            if (!this.arena.contains(player.body.x, player.body.y)) {
                 this.playerDied(player);
             }
         });
@@ -112,7 +112,6 @@ export class Main extends Phaser.State {
     }
     nextRound() {
         ++this.currentRound;
-        this.placePlayersAtStartingPos();
         this.players.callAll("revive", null);
     }
     playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
