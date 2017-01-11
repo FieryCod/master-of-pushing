@@ -42,7 +42,7 @@ export class MainMenu extends Phaser.State {
     }
     private addOption(text: string, callback: Function) {
         this.optionsArray.push(new MenuOption(this.game, text.toUpperCase(), this.optionCount, this.textOptions, callback));
-        this.optionCount++;
+        ++this.optionCount;
 
     }
 }

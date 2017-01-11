@@ -27,8 +27,9 @@ export class Credits extends Phaser.State {
         this.game.add.graphics(this.world.centerX - 40, 140).lineStyle(10, 0xFFFFFF).lineTo(340, 0);
     }
     create() {
-        for (let i in this.devs)
+        for (let i in this.devs) {
             this.addDev(this.devs[i].position, this.devs[i].name, +i);
+        }
 
     }
     private addDev(position: string, devName: string, curr: number) {
