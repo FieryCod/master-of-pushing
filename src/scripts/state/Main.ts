@@ -79,7 +79,7 @@ export class Main extends Phaser.State {
             if (!this.arena.contains(player.centerX, player.centerY)) {
                 this.playerDied(player);
             }
-        }, null);
+        }, this);
         let player = <Player>this.players.getChildAt(0);
         if (this.cursors.left.isDown) {
             player.body.velocity.x -= 5;
