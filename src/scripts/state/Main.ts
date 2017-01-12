@@ -1,8 +1,5 @@
 import { Player } from "../classes/Player";
-const START_POS_EDGE_OFFSET: number = 50;
-const DEFAULT_ANIMATION_PLAYER: string = "fly";
-const PLAYER_SPRITESHEET: string = "ship";
-const PLAYER_COLLISION_SIZE: number = 28;
+import {CONFIG} from "../Config";
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
 export class Main extends Phaser.State {
@@ -44,7 +41,7 @@ export class Main extends Phaser.State {
         this.players.forEach(player => {
             this.game.physics.p2.enable(player, false);
             let playerCollisionGroup = this.game.physics.p2.createCollisionGroup();
-            player.body.setCircle(PLAYER_COLLISION_SIZE);
+            player.body.setCircle(CONFIG.PLAYER_COLLISION_SIZE);
             player.body.setCollisionGroup(playerCollisionGroup);
             playerCollisionGroups.push(playerCollisionGroup);
         }, this);
@@ -52,13 +49,13 @@ export class Main extends Phaser.State {
         this.players.forEach(p => p.body.collides(playerCollisionGroups, this.playersCollideCallback), this);
     }
     addPlayer(name: string) {
-        let player = new Player(this.game, this.arena.x, this.arena.y, PLAYER_SPRITESHEET);
+        let player = new Player(this.game, this.arena.x, this.arena.y, CONFIG.PLAYER_SPRITESHEET);
         player.name = name;
         player.scale.set(2);
         player.anchor.x = player.anchor.y = 0.5;
         player.smoothed = false;
-        player.animations.add(DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
-        player.play(DEFAULT_ANIMATION_PLAYER);
+        player.animations.add(CONFIG.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
+        player.play(CONFIG.DEFAULT_ANIMATION_PLAYER);
         this.players.add(player);
     }
     placePlayersAtStartingPos() {
@@ -69,8 +66,8 @@ export class Main extends Phaser.State {
         for (let i = 0; i < positions; ++i) {
             angle = i * degreesOffset;
             player = this.players.getChildAt(i) as Player;
-            player.body.x = player.startingPosition.x = this.arena.x + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
-            player.body.y = player.startingPosition.y = this.arena.y + (this.arena.radius - START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
+            player.body.x = player.startingPosition.x = this.arena.x + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
+            player.body.y = player.startingPosition.y = this.arena.y + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
             player.body.setZeroVelocity();
         }
     };

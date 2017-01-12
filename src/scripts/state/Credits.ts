@@ -1,4 +1,5 @@
 import {Menu} from "./Menu";
+import {CONFIG} from "../Config";
 interface Devs {
     position: string;
     name: string;
@@ -29,8 +30,8 @@ export class Credits extends Phaser.State {
     }
     private addDev(position: string, devName: string, curr: number) {
 
-        this.game.add.text(this.world.centerX - 350, 250 + (150 * curr), `Position: ${position}`, this.menu.textOptions);
+        this.game.add.text(this.world.centerX - 350, 250 + (150 * curr), `Position: ${position}`, CONFIG.TEXT_OPTIONS);
 
-        this.game.add.text(this.world.centerX - 350, 300 + (150 * curr), `Name: ${devName}`, this.menu.textOptions);
+        this.game.add.text(this.world.centerX - 350, 300 + (150 * curr), `Name: ${devName}`, CONFIG.TEXT_OPTIONS);
     }
 }

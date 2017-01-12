@@ -1,30 +1,27 @@
+import {CONFIG} from "../Config";
 export class MenuOption {
 
     private optionText: Phaser.Text;
-    private activeColor: Phaser.Color;
-    public isActive: boolean;
     private routeTo: Function;
-    constructor(game: Phaser.Game, text: string, optionCount: number, textOptions: Object, callback: Function) {
 
-        this.activeColor = "#5418A7";
-        this.optionText = game.add.text(game.world.centerX, (optionCount * 80) + 300, text, textOptions);
-        this.optionText.anchor.setTo(0.5);
-        this.optionText.stroke = "rgba(0,0,0,0)";
-        this.optionText.strokeThickness = 4;
+    constructor(game: Phaser.Game, text: string, optionCount: number, callback: Function) {
+        this.optionText = game.add.text(game.world.centerX, (optionCount * 80) + 300, text, CONFIG.TEXT_OPTIONS);
+        this.optionText.anchor.set(CONFIG.ANCHOR);
         this.optionText.inputEnabled = true;
         this.routeTo = callback;
     }
     public makeActive() {
 
-        this.optionText.fill = this.activeColor;
+        this.optionText.fill = CONFIG.ACTIVE_TEXT;
         this.optionText.stroke = "rgba(245, 2, 2, 0.7)";
     }
     public makeInactive() {
 
-        this.optionText.fill = "white";
+        this.optionText.fill = CONFIG.INACTIVE_TEXT;
         this.optionText.stroke = "rgba(0,0,0,0)";
     }
-    public route(){
-      this.routeTo();
+    public route() {
+
+        this.routeTo();
     }
 }

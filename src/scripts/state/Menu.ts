@@ -1,14 +1,7 @@
 import {MenuOption} from "../classes/menuOption";
-interface TextOptionsObject {
-    font?: string;
-    fill?: string;
-    align?: string;
-    stroke?: string;
-    strokeThickness?: number;
-}
+import {CONFIG} from "../Config";
 export class Menu {
 
-    public textOptions: TextOptionsObject;
     public optionsArray: Array<MenuOption>;
     private gameTitle: Phaser.BitmapText;
     private optionCount: number;
@@ -22,24 +15,17 @@ export class Menu {
         this.optionCount = 0;
 
         this.optionsArray = [];
-        this.textOptions = {
-            font: "30pt carrier_command",
-            fill: "white", align: "center",
-            stroke: "rgba(0,0,0,0)",
-            strokeThickness: 4
-        };
-
-        this.gameTitle = this.game.add.bitmapText(this.game.world.centerX, 100, "carrier_command", "Push Master", 45);
+        this.gameTitle = this.game.add.bitmapText(this.game.world.centerX, 100, CONFIG.TITLE_FONT, CONFIG.TITLE, CONFIG.TITLE_FONT_SIZE);
         this.gameTitle.anchor.set(0.5);
         this.game.add.tween(this.gameTitle).from({ y: -100, angle: 45 }, 2000, Phaser.Easing.Bounce.Out, true, 0, 0);
-        this.game.add.graphics(this.game.world.centerX - 300, 140).lineStyle(10, 0xFFFFFF).lineTo(215, 0);
-        this.game.add.graphics(this.game.world.centerX - 40, 140).lineStyle(10, 0xFFFFFF).lineTo(340, 0);
+        this.game.add.graphics(this.game.world.centerX - 300, 140).lineStyle(10, CONFIG.BASIC_TEXT_COLOR).lineTo(215, 0);
+        this.game.add.graphics(this.game.world.centerX - 40, 140).lineStyle(10, CONFIG.BASIC_TEXT_COLOR).lineTo(340, 0);
         this.CursorKeys = this.game.input.keyboard.createCursorKeys();
         this.EnterKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
     }
     public addOption(text: string, callback: Function) {
 
-        this.optionsArray.push(new MenuOption(this.game, text.toUpperCase(), this.optionCount, this.textOptions, callback));
+        this.optionsArray.push(new MenuOption(this.game, text.toUpperCase(), this.optionCount, callback));
         ++this.optionCount;
     }
     private updateCurrOption(optionNumber: number) {
