@@ -12,6 +12,7 @@ let open = require("gulp-open");
 let browserify = require("browserify");
 let tsify = require("tsify");
 let source = require("vinyl-source-stream");
+let plumber = require("gulp-plumber");
 
 const config = {
     styles: {
@@ -61,7 +62,9 @@ gulp.task("typescript", () => {
     })
         .plugin(tsify)
         .bundle()
+        .on("error", function (error) { console.error(error.toString()); })
         .pipe(source("main.js"))
+        .pipe(plumber())
         .pipe(gulp.dest(paths.build));
 });
 

@@ -1,4 +1,5 @@
 export class Player extends Phaser.Sprite {
+
     public startingPosition: Phaser.Point;
     public lastTouchedBy: Player;
     public points: number;
