@@ -6,9 +6,10 @@ import {Main} from "./state/Main";
 import {Preload} from "./state/Preload";
 import {MainMenu} from "./state/MainMenu";
 import {Credits} from "./state/Credits";
-export class Game extends Phaser.Game {
-    constructor() {
 
+export class Game extends Phaser.Game {
+
+    constructor() {
         super("100%", "100%", Phaser.AUTO, "", null, false, true, null);
         this.state.add("boot", Boot);
         this.state.add("preload", Preload);
