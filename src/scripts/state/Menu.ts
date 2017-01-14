@@ -11,9 +11,9 @@ export class Menu {
 
     constructor(private game: Phaser.Game) {
 
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.RESIZE;
         this.currOption = 0;
         this.optionCount = 0;
-
         this.optionsArray = [];
         this.gameTitle = this.game.add.bitmapText(this.game.world.centerX, 100, CONFIG.TITLE_FONT, CONFIG.TITLE, CONFIG.TITLE_FONT_SIZE);
         this.gameTitle.anchor.set(0.5);
@@ -22,6 +22,7 @@ export class Menu {
         this.game.add.graphics(this.game.world.centerX - 40, 140).lineStyle(10, CONFIG.BASIC_TEXT_COLOR).lineTo(340, 0);
         this.CursorKeys = this.game.input.keyboard.createCursorKeys();
         this.EnterKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.game.input.onDown.add(this.gofull, this);
     }
     public addOption(text: string, callback: Function) {
 
@@ -34,6 +35,16 @@ export class Menu {
 
         if ((this.currOption < 0) || (this.currOption >= this.optionsArray.length))
             this.currOption = 0;
+    }
+    gofull() {
+
+        if (this.game.scale.isFullScreen) {
+            this.game.scale.stopFullScreen();
+        }
+        else {
+            this.game.scale.startFullScreen(false);
+        }
+
     }
     public update() {
         if (this.EnterKey.justDown)

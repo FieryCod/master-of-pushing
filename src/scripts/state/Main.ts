@@ -1,8 +1,8 @@
 import { Player } from "../classes/Player";
-
 import {CONFIG} from "../Config";
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
+// FIXME: Arena should be responsive
 export class Main extends Phaser.State {
     private rounds: number;
     private currentRound: number;
