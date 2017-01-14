@@ -74,8 +74,8 @@ export class Main extends Phaser.State {
         for (let i = 0; i < positions; ++i) {
             angle = i * degreesOffset;
             player = this.players.getChildAt(i) as Player;
-            player.body.x = player.startingPosition.x = this.arena.x + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
-            player.body.y = player.startingPosition.y = this.arena.y + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
+            player.body.x = player.startPosition.x = this.arena.x + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
+            player.body.y = player.startPosition.y = this.arena.y + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
         }
     };
     update() {

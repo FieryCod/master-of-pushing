@@ -52,8 +52,5 @@ export class Menu {
             else
                 this.optionsArray[i].makeInactive();
         }
-
-
     }
-
 }
