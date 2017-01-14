@@ -3,19 +3,24 @@ import {CONFIG} from "../Config";
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
 // FIXME: Arena should be responsive
+// FIXME: USE PRIVATE, PUBLIC when you define functions
 export class Main extends Phaser.State {
+
     private rounds: number;
     private currentRound: number;
     private players: Phaser.Group;
     private cursors: Phaser.CursorKeys;
     private arena: Phaser.Circle;
+    private graphics: Phaser.Graphics;
+
     init(rounds: number) {
-        this.rounds = rounds || 3;
+        this.rounds = rounds || 1;
         this.currentRound = 1;
         this.players = new Phaser.Group(this.game);
         this.cursors = this.game.input.keyboard.createCursorKeys();
     }
     create() {
+
         this.setupArena();
         this.game.world.bringToTop(this.players);
         this.addPlayer("Player1");
@@ -29,11 +34,11 @@ export class Main extends Phaser.State {
         this.players.callAll("postionAtStart", null);
     }
     setupArena() {
-        this.arena = new Phaser.Circle(450, 450, 900);
+        this.arena = new Phaser.Circle(this.world.centerX, this.world.centerY, this.world.height);
         // TODO: Replace temp graphic for arena
-        let graphics = this.game.add.graphics(this.arena.x, this.arena.y);
-        graphics.beginFill(TEMP_ARENA_COLOR, 1);
-        graphics.drawCircle(0, 0, this.arena.diameter);
+        this.graphics = this.game.add.graphics(0, 0);
+        this.graphics.beginFill(TEMP_ARENA_COLOR, 1);
+        this.graphics.drawCircle(this.world.centerX, this.world.centerY, this.arena.diameter);
         // --
     }
     initPhysics() {
@@ -66,7 +71,7 @@ export class Main extends Phaser.State {
 
         this.players.add(player);
     }
-    assignStartPositionsToPlayers () {
+    assignStartPositionsToPlayers() {
         let positions: number = this.players.length;
         let degreesOffset: number = 360 / positions;
         let angle: number;
@@ -103,7 +108,6 @@ export class Main extends Phaser.State {
         player.kill();
         if (this.players.countLiving() === 1) {
             this.roundEnded();
-
         }
     }
     roundEnded() {
@@ -111,6 +115,7 @@ export class Main extends Phaser.State {
         ++roundSurvivor.points;
         if (this.currentRound >= this.rounds) {
             // TODO: Finish game and redirect to score screen;
+            this.showGameResults();
         } else {
             this.nextRound();
         }
@@ -122,5 +127,14 @@ export class Main extends Phaser.State {
     }
     playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;
+    }
+    private showGameResults() {
+        setTimeout(() => {
+
+            // TODO: lepiej walnąć czarnoprzeźroczystą tablice z punktami:
+            // TODO: lepiej nie usuwać planszy i graczy bo będzie brzydki efekt  
+            this.graphics.destroy();
+            this.players.forEachAlive(player => player.kill(), this);
+        }, 1000);
     }
 }
