@@ -1,4 +1,4 @@
-import {Menu} from "./Menu";
+import {Menu} from "../classes/Menu";
 import {CONFIG} from "../Config";
 interface Devs {
     position: string;
@@ -10,6 +10,7 @@ export class Credits extends Phaser.State {
     private devs: Array<Devs>;
     init() {
         this.menu = new Menu(this.game);
+        this.menu.addOption("Back", () => { this.game.state.start("menu"); }, true);
         this.devs = [
             {
                 position: "Programmer", name: "Krzysztof Buchacz"
@@ -25,6 +26,9 @@ export class Credits extends Phaser.State {
     create() {
         for (let i in this.devs)
             this.addDev(this.devs[i].position, this.devs[i].name, +i);
+    }
+    update() {
+        this.menu.update();
     }
     private addDev(position: string, devName: string, curr: number) {
 
