@@ -1,4 +1,4 @@
-const BasicTextColor: number | string = "white";
+const BasicTextColor: string = "#FFFFFF";
 const BasicFont: string = "?";
 const BasicFontSize: number = 30;
 const TitleFont: string = "carrier_command";
@@ -14,7 +14,7 @@ const InactiveText: number | string = "#FFFFFF";
 const Anchor: number = 0.5;
 const Music: Array<string> = ["music0.mp3"];
 
-export const CONFIG = {
+export const CONFIG: CONFIG = {
 
     GAME_BACKGROUND_COLOR: GameBackgroundColor,
     PLAYER_SPRITESHEET: PlayerSpritesheet,
@@ -41,8 +41,25 @@ export const CONFIG = {
 
 
 };
-
-interface TextOptionsObject {
+interface CONFIG {
+    readonly GAME_BACKGROUND_COLOR: number;
+    readonly PLAYER_SPRITESHEET: string;
+    readonly PLAYER_COLLISION_SIZE: number;
+    readonly DEFAULT_ANIMATION_PLAYER: string;
+    readonly START_POS_EDGE_OFFSET: number;
+    readonly ANCHOR: number;
+    readonly MUSIC: Array<string>;
+    readonly ACTIVE_TEXT: number | string;
+    readonly INACTIVE_TEXT: number | string;
+    readonly BASIC_TEXT_COLOR: string;
+    readonly BASIC_FONT_SIZE: number;
+    readonly BASIC_FONT: string;
+    readonly TITLE: string;
+    readonly TITLE_FONT: string;
+    readonly TITLE_FONT_SIZE: number;
+    TEXT_OPTIONS: TextOptionsObject;
+}
+export interface TextOptionsObject {
     font?: string;
     fill?: string | number;
     align?: string;
