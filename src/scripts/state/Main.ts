@@ -40,7 +40,6 @@ export class Main extends Phaser.State {
         this.graphics.beginFill(TEMP_ARENA_COLOR, 1);
         this.graphics.drawCircle(this.world.centerX, this.world.centerY, this.arena.diameter);
         // --
-        this.showGameResults();
     }
     private initPhysics(): void {
         let playerCollisionGroups = [];

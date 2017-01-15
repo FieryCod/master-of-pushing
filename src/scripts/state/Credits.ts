@@ -13,9 +13,11 @@ export class Credits extends Phaser.State {
     private TextOptions: TextOptionsObject;
     init() {
         this.menu = new Menu(this.game);
+
         this.menu.addOption("Back", () => {
             this.game.state.start("menu");
         }, true);
+
         this.TextOptions = (<any>Object).assign({}, CONFIG.TEXT_OPTIONS);
         this.devs = [
             {
@@ -39,8 +41,10 @@ export class Credits extends Phaser.State {
     }
     private addDev(position: string, devName: string, curr: number) {
 
-        this.game.add.text(this.world.centerX - 200, 300 + (150 * curr), `Position: ${position}`, this.TextOptions);
-        this.game.add.text(this.world.centerX - 200, 350 + (150 * curr), `Name: ${devName}`, this.TextOptions);
+        let text1 = this.game.add.text(this.world.centerX, 300 + (150 * curr), `Position: ${position}`, this.TextOptions);
+        let text2 = this.game.add.text(this.world.centerX, 350 + (150 * curr), `Name: ${devName}`, this.TextOptions);
 
+        text1.anchor.set(0.5);
+        text2.anchor.set(0.5);
     }
 }
