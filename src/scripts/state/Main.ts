@@ -40,6 +40,7 @@ export class Main extends Phaser.State {
         this.graphics.beginFill(TEMP_ARENA_COLOR, 1);
         this.graphics.drawCircle(this.world.centerX, this.world.centerY, this.arena.diameter);
         // --
+        this.showGameResults();
     }
     private initPhysics(): void {
         let playerCollisionGroups = [];
@@ -129,15 +130,15 @@ export class Main extends Phaser.State {
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;
     }
     private showGameResults() {
-        setTimeout(() => {
-            this.game.stage.setBackgroundColor(0x2b363a);
+
             this.graphics.beginFill(CONFIG.GAME_BACKGROUND_COLOR, 0.75);
             let rect = this.graphics.drawRect(0, 0, this.world.width, this.world.height);
-            this.game.world.bringToTop(rect);
             let text = this.game.add.text(this.game.world.centerX, 300, "YEA YOU WON", CONFIG.TEXT_OPTIONS);
             text.anchor.set(CONFIG.ANCHOR);
-            // TODO: lepiej walnąć czarnoprzeźroczystą tablice z punktami:
-            // TODO: lepiej nie usuwać planszy i graczy bo będzie brzydki efekt
-        }, 1000);
+            text.alpha = 0;
+            rect.alpha = 0;
+            this.game.add.tween(text).to( { alpha: 1 }, 3000, Phaser.Easing.Linear.None, true, 1000, 0, false);
+            this.game.add.tween(rect).to( { alpha: 1 }, 3000, Phaser.Easing.Linear.None, true, 1000, 0, false);
+            this.game.world.bringToTop(text);
     }
 }
