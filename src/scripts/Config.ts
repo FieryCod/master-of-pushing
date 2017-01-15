@@ -12,9 +12,10 @@ const START_POS_EDGE_OFFSET: number = 50;
 const ACTIVE_TEXT_COLOR: number | string = "#5418A7";
 const INACTIVE_TEXT_COLOR: number | string = "#FFFFFF";
 const DEFAULT_ANCHOR: number = 0.5;
-const TEXT_OPTIONS: Object = {
+const TEXT_OPTIONS: TextOptionsObject = {
     font: `${BASIC_FONT_SIZE}pt ${BASIC_FONT}`,
-    fill: BASIC_TEXT_COLOR, align: "center",
+    fill: BASIC_TEXT_COLOR,
+    align: "center",
     stroke: "rgba(0,0,0,0)",
     strokeThickness: 4,
 };
@@ -36,3 +37,12 @@ export const CONFIG = {
     DEFAULT_ANCHOR,
     TEXT_OPTIONS
 };
+
+interface TextOptionsObject {
+    font?: string;
+    fill?: string | number;
+    align?: string;
+    stroke?: string;
+    strokeThickness?: number;
+    anchor?: number;
+}
