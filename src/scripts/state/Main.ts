@@ -33,7 +33,7 @@ export class Main extends Phaser.State {
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
     }
-    setupArena() {
+    private setupArena() {
         this.arena = new Phaser.Circle(this.world.centerX, this.world.centerY, this.world.height);
         // TODO: Replace temp graphic for arena
         this.graphics = this.game.add.graphics(0, 0);
@@ -41,7 +41,7 @@ export class Main extends Phaser.State {
         this.graphics.drawCircle(this.world.centerX, this.world.centerY, this.arena.diameter);
         // --
     }
-    initPhysics() {
+    private initPhysics(): void {
         let playerCollisionGroups = [];
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.p2.setImpactEvents(true);
@@ -57,7 +57,7 @@ export class Main extends Phaser.State {
 
         this.players.forEach(p => p.body.collides(playerCollisionGroups, this.playersCollideCallback), this);
     }
-    addPlayer(name: string) {
+    private addPlayer(name: string) {
 
         let player = new Player(this.game, this.arena.x, this.arena.y, CONFIG.PLAYER_SPRITESHEET);
 
@@ -71,7 +71,7 @@ export class Main extends Phaser.State {
 
         this.players.add(player);
     }
-    assignStartPositionsToPlayers() {
+    private assignStartPositionsToPlayers() {
         let positions: number = this.players.length;
         let degreesOffset: number = 360 / positions;
         let angle: number;
@@ -130,11 +130,14 @@ export class Main extends Phaser.State {
     }
     private showGameResults() {
         setTimeout(() => {
-
+            this.game.stage.setBackgroundColor(0x2b363a);
+            this.graphics.beginFill(CONFIG.GAME_BACKGROUND_COLOR, 0.75);
+            let rect = this.graphics.drawRect(0, 0, this.world.width, this.world.height);
+            this.game.world.bringToTop(rect);
+            let text = this.game.add.text(this.game.world.centerX, 300, "YEA YOU WON", CONFIG.TEXT_OPTIONS);
+            text.anchor.set(CONFIG.ANCHOR);
             // TODO: lepiej walnąć czarnoprzeźroczystą tablice z punktami:
-            // TODO: lepiej nie usuwać planszy i graczy bo będzie brzydki efekt  
-            this.graphics.destroy();
-            this.players.forEachAlive(player => player.kill(), this);
+            // TODO: lepiej nie usuwać planszy i graczy bo będzie brzydki efekt
         }, 1000);
     }
 }
