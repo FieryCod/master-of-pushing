@@ -1,4 +1,4 @@
-const BasicTextColor: number = 0xFFFFFF;
+const BasicTextColor: number | string = "white";
 const BasicFont: string = "?";
 const BasicFontSize: number = 30;
 const TitleFont: string = "carrier_command";
@@ -48,7 +48,7 @@ interface CONFIG {
     ANCHOR: number;
     ACTIVE_TEXT: number | string;
     INACTIVE_TEXT: number | string;
-    BASIC_TEXT_COLOR: number;
+    BASIC_TEXT_COLOR: number | string;
     BASIC_FONT_SIZE: number;
     BASIC_FONT: string;
     TITLE: string;
