@@ -10,7 +10,7 @@ export class Credits extends Phaser.State {
     private menu: Menu;
     private text: Phaser.Text;
     private devs: Array<Devs>;
-    private TextOptions: TextOptionsObject;
+    private textOptions: TextOptionsObject;
     init() {
         this.menu = new Menu(this.game);
 
@@ -18,7 +18,7 @@ export class Credits extends Phaser.State {
             this.game.state.start("menu");
         }, true);
 
-        this.TextOptions = (<any>Object).assign({}, CONFIG.TEXT_OPTIONS);
+        this.textOptions = (<any>Object).assign({}, CONFIG.TEXT_OPTIONS);
         this.devs = [
             {
                 position: "Programmer", name: "Krzysztof Buchacz"
@@ -30,7 +30,7 @@ export class Credits extends Phaser.State {
                 position: "Programmer", name: "Tomasz Kulpa"
             }
         ];
-        this.TextOptions.font = CONFIG.BASIC_FONT_SIZE - 15 + `pt ${CONFIG.BASIC_FONT}`;
+        this.textOptions.font = CONFIG.BASIC_FONT_SIZE - 15 + `pt ${CONFIG.BASIC_FONT}`;
     }
     create() {
         for (let i in this.devs)
@@ -41,8 +41,8 @@ export class Credits extends Phaser.State {
     }
     private addDev(position: string, devName: string, curr: number) {
 
-        let text1 = this.game.add.text(this.world.centerX, 300 + (150 * curr), `Position: ${position}`, this.TextOptions);
-        let text2 = this.game.add.text(this.world.centerX, 350 + (150 * curr), `Name: ${devName}`, this.TextOptions);
+        let text1 = this.game.add.text(this.world.centerX, 300 + (150 * curr), `Position: ${position}`, this.textOptions);
+        let text2 = this.game.add.text(this.world.centerX, 350 + (150 * curr), `Name: ${devName}`, this.textOptions);
 
         text1.anchor.set(0.5);
         text2.anchor.set(0.5);
