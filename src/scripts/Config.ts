@@ -17,6 +17,7 @@ const STROKE_ACTIVE_COLOR: string = "#FF0000";
 const STROKE_INACTIVE_COLOR: string = "#000000";
 const MUSIC: Array<string> = ["music0.mp3"];
 
+
 const TEXT_OPTIONS: TextOptionsObject = {
     font: `${BASIC_FONT_SIZE}pt ${BASIC_FONT}`,
     fill: BASIC_TEXT_COLOR,
@@ -24,6 +25,7 @@ const TEXT_OPTIONS: TextOptionsObject = {
     stroke: "rgba(0,0,0,0)",
     strokeThickness: 4,
 };
+
 const SMALLER_TEXT_OPTIONS: TextOptionsObject = {
     font: `${SMALLER_FONT_SIZE}pt ${BASIC_FONT}`,
     fill: BASIC_TEXT_COLOR,
@@ -78,7 +80,9 @@ interface CONFIG {
     readonly TEXT_OPTIONS: TextOptionsObject;
     readonly SMALLER_TEXT_OPTIONS: TextOptionsObject;
 }
-export interface TextOptionsObject {
+
+interface TextOptionsObject {
+
     font?: string;
     fill?: string | number;
     align?: string;
