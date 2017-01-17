@@ -80,9 +80,7 @@ interface CONFIG {
     readonly TEXT_OPTIONS: TextOptionsObject;
     readonly SMALLER_TEXT_OPTIONS: TextOptionsObject;
 }
-
 interface TextOptionsObject {
-
     font?: string;
     fill?: string | number;
     align?: string;
