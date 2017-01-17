@@ -1,6 +1,5 @@
 import { Menu } from "../classes/Menu";
 import { CONFIG } from "../Config";
-import { TextOptionsObject } from "../Config";
 
 interface Devs {
     position: string;

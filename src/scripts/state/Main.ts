@@ -33,7 +33,6 @@ export class Main extends Phaser.State {
         this.initPhysics();
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
-        this.showGameResults();
     }
     private setupArena() {
         this.arena = new Phaser.Circle(this.world.centerX, this.world.centerY, this.world.height);
