@@ -1,4 +1,5 @@
-import {CONFIG} from "../Config";
+import { CONFIG } from "../Config";
+
 export class MenuOption {
 
     private optionText: Phaser.Text;
@@ -13,7 +14,7 @@ export class MenuOption {
         this.y = isBack ? 200 : (optionCount * 80) + 300;
 
         this.optionText = game.add.text(this.x, this.y, text, CONFIG.TEXT_OPTIONS);
-        this.optionText.anchor.set(CONFIG.ANCHOR);
+        this.optionText.anchor.set(CONFIG.DEFAULT_ANCHOR);
         this.optionText.inputEnabled = true;
         this.optionFunction = callback;
 
@@ -22,13 +23,13 @@ export class MenuOption {
     }
     public makeActive() {
 
-        this.optionText.fill = CONFIG.ACTIVE_TEXT;
-        this.optionText.stroke = "rgba(245, 2, 2, 0.7)";
+        this.optionText.fill = CONFIG.ACTIVE_TEXT_COLOR;
+        this.optionText.stroke = CONFIG.STROKE_ACTIVE_COLOR;
     }
     public makeInactive() {
 
-        this.optionText.fill = CONFIG.INACTIVE_TEXT;
-        this.optionText.stroke = "rgba(0,0,0,0)";
+        this.optionText.fill = CONFIG.INACTIVE_TEXT_COLOR;
+        this.optionText.stroke = CONFIG.STROKE_INACTIVE_COLOR;
     }
     public changeText(text: string) {
         this.optionText.setText(text);

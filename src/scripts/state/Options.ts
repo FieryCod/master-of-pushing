@@ -1,5 +1,5 @@
-import {Menu} from "../classes/Menu";
-import {Jukebox} from "../classes/Jukebox";
+import { Menu } from "../classes/Menu";
+import { Jukebox } from "../classes/Jukebox";
 
 export class Options extends Phaser.State {
 
@@ -15,10 +15,12 @@ export class Options extends Phaser.State {
 
             this.menu.optionsArray[this.menu.currOption].changeText("MUSIC: " + (this.musicStatus ? "ON" : "OFF"));
 
-            if (this.musicStatus)
+            if (this.musicStatus) {
                 Jukebox.startMusic();
-            else
+            }
+            else {
                 Jukebox.stopMusic();
+            }
 
             this.musicStatus = !this.musicStatus;
         });

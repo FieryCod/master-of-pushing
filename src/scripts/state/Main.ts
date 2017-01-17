@@ -1,5 +1,5 @@
 import { Player } from "../classes/Player";
-import {CONFIG} from "../Config";
+import { CONFIG } from "../Config";
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
 // FIXME: Arena should be responsive
@@ -12,6 +12,7 @@ export class Main extends Phaser.State {
     private cursors: Phaser.CursorKeys;
     private arena: Phaser.Circle;
     private graphics: Phaser.Graphics;
+    private winningText: string;
 
     init(rounds: number) {
         this.rounds = rounds || 1;
@@ -32,6 +33,7 @@ export class Main extends Phaser.State {
         this.initPhysics();
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
+        this.showGameResults();
     }
     private setupArena() {
         this.arena = new Phaser.Circle(this.world.centerX, this.world.centerY, this.world.height);
@@ -42,6 +44,7 @@ export class Main extends Phaser.State {
         // --
     }
     private initPhysics(): void {
+
         let playerCollisionGroups = [];
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.p2.setImpactEvents(true);
@@ -63,7 +66,7 @@ export class Main extends Phaser.State {
 
         player.name = name;
         player.scale.set(2);
-        player.anchor.x = player.anchor.y = 0.5;
+        player.anchor.x = player.anchor.y = CONFIG.DEFAULT_ANCHOR;
         player.smoothed = false;
 
         player.animations.add(CONFIG.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
@@ -72,6 +75,7 @@ export class Main extends Phaser.State {
         this.players.add(player);
     }
     private assignStartPositionsToPlayers() {
+
         let positions: number = this.players.length;
         let degreesOffset: number = 360 / positions;
         let angle: number;
@@ -84,6 +88,7 @@ export class Main extends Phaser.State {
         }
     };
     update() {
+
         this.players.forEachAlive(player => {
             if (!this.arena.contains(player.body.x, player.body.y)) {
                 this.playerDied(player);
@@ -104,13 +109,15 @@ export class Main extends Phaser.State {
             player.body.velocity.y += 5;
         }
     }
-    playerDied(player: Player) {
+    private playerDied(player: Player) {
+
         player.kill();
         if (this.players.countLiving() === 1) {
             this.roundEnded();
         }
     }
-    roundEnded() {
+    private roundEnded() {
+
         let roundSurvivor = this.players.getFirstAlive();
         ++roundSurvivor.points;
         if (this.currentRound >= this.rounds) {
@@ -120,24 +127,30 @@ export class Main extends Phaser.State {
             this.nextRound();
         }
     }
+    private killAll() {
 
-    nextRound() {
+        this.players.forEachAlive(player => player.kill(), this);
+    }
+    private nextRound() {
+
         ++this.currentRound;
         this.players.callAll("revive", null);
     }
     playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
+
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;
     }
     private showGameResults() {
-
-            this.graphics.beginFill(CONFIG.GAME_BACKGROUND_COLOR, 0.75);
-            let rect = this.graphics.drawRect(0, 0, this.world.width, this.world.height);
-            let text = this.game.add.text(this.game.world.centerX, 300, "YEA YOU WON", CONFIG.TEXT_OPTIONS);
-            text.anchor.set(CONFIG.ANCHOR);
-            text.alpha = 0;
-            rect.alpha = 0;
-            this.game.add.tween(text).to( { alpha: 1 }, 3000, Phaser.Easing.Linear.None, true, 1000, 0, false);
-            this.game.add.tween(rect).to( { alpha: 1 }, 3000, Phaser.Easing.Linear.None, true, 1000, 0, false);
-            this.game.world.bringToTop(text);
+        this.killAll();
+        let delayTween = 1000;
+        let duration = 3000;
+        let rect = this.graphics.drawRect(0, 0, this.world.width, this.world.height);
+        let text = this.game.add.text(this.game.world.centerX, 300, this.winningText, CONFIG.TEXT_OPTIONS);
+        text.anchor.set(CONFIG.DEFAULT_ANCHOR);
+        text.alpha = 0;
+        rect.alpha = 0;
+        this.game.add.tween(text).to({ alpha: 1 }, duration, Phaser.Easing.Linear.None, true, delayTween, 0, false);
+        this.game.add.tween(rect).to({ alpha: 1 }, duration, Phaser.Easing.Linear.None, true, delayTween, 0, false);
+        this.game.world.bringToTop(text);
     }
 }

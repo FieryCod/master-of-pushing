@@ -1,5 +1,5 @@
-import {MenuOption} from "../classes/MenuOption";
-import {CONFIG} from "../Config";
+import { MenuOption } from "../classes/MenuOption";
+import { CONFIG } from "../Config";
 
 export class Menu {
 
@@ -7,8 +7,8 @@ export class Menu {
     private gameTitle: Phaser.BitmapText;
     private optionCount: number;
     public currOption: number;
-    private CursorKeys: Phaser.CursorKeys;
-    private EnterKey: Phaser.Key;
+    private cursorKeys: Phaser.CursorKeys;
+    private enterKey: Phaser.Key;
     private back: MenuOption;
 
     constructor(private game: Phaser.Game) {
@@ -20,10 +20,11 @@ export class Menu {
         this.gameTitle = this.game.add.bitmapText(this.game.world.centerX, 100, CONFIG.TITLE_FONT, CONFIG.TITLE, CONFIG.TITLE_FONT_SIZE);
         this.gameTitle.anchor.set(0.5);
         this.game.add.tween(this.gameTitle).from({ y: -100, angle: 45 }, 2000, Phaser.Easing.Bounce.Out, true, 0, 0);
-        this.CursorKeys = this.game.input.keyboard.createCursorKeys();
-        this.EnterKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-        this.game.input.onDown.add(this.gofull, this);
+        this.cursorKeys = this.game.input.keyboard.createCursorKeys();
+        this.enterKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+        this.game.input.onDown.add(this.toggleFullscreen, this);
     }
+
     public addOption(text: string, callback: Function, isBack: boolean = false, isPrimal: boolean = false): void {
 
         this.optionsArray.push(new MenuOption(this.game, text.toUpperCase(), this.optionCount, callback, isBack, isPrimal));
@@ -36,7 +37,7 @@ export class Menu {
         if ((this.currOption < 0) || (this.currOption >= this.optionsArray.length))
             this.currOption = 0;
     }
-    private gofull(): void {
+    private toggleFullscreen(): void {
 
         if (this.game.scale.isFullScreen) {
             this.game.scale.stopFullScreen();
@@ -48,13 +49,13 @@ export class Menu {
     }
     public update(): void {
 
-        if (this.EnterKey.justDown)
+        if (this.enterKey.justDown)
             this.optionsArray[this.currOption].callOptionFunction();
 
-        if (this.CursorKeys.up.justDown)
+        if (this.cursorKeys.up.justDown)
             this.updateCurrOption(-1);
 
-        if (this.CursorKeys.down.justDown)
+        if (this.cursorKeys.down.justDown)
             this.updateCurrOption(1);
 
         for (let i = 0; i < this.optionsArray.length; ++i) {
