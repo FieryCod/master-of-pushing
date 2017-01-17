@@ -4,7 +4,6 @@ export class Boot extends Phaser.State {
 
     }
     create() {
-        // this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
         this.game.stage.backgroundColor = CONFIG.GAME_BACKGROUND_COLOR;
         this.input.maxPointers = 1;
         this.stage.disableVisibilityChange = true;
