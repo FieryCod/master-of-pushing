@@ -1,38 +1,45 @@
+import { RoundStartTimer } from "../classes/RoundStartTimer";
 import { Player } from "../classes/Player";
 import { CONFIG } from "../Config";
+
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
 // FIXME: Arena should be responsive
-// FIXME: USE PRIVATE, PUBLIC when you define functions
 export class Main extends Phaser.State {
 
     private rounds: number;
     private currentRound: number;
     private players: Phaser.Group;
+    private controlledPlayer: Player;
     private cursors: Phaser.CursorKeys;
     private arena: Phaser.Circle;
     private graphics: Phaser.Graphics;
     private winningText: string;
-
+    private roundStartTimer: RoundStartTimer;
     init(rounds: number) {
-        this.rounds = rounds || 1;
+        this.rounds = rounds || 2;
         this.currentRound = 1;
         this.players = new Phaser.Group(this.game);
         this.cursors = this.game.input.keyboard.createCursorKeys();
+        this.roundStartTimer = new RoundStartTimer(this.game, this.players);
+        this.game.time.add(this.roundStartTimer);
     }
     create() {
-
         this.setupArena();
-        this.game.world.bringToTop(this.players);
         this.addPlayer("Player1");
         this.addPlayer("Player2");
         this.addPlayer("Player3");
         this.addPlayer("Player4");
         this.addPlayer("Player5");
         this.addPlayer("Player6");
+        this.controlledPlayer = <Player>this.players.getChildAt(0);
         this.initPhysics();
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
+        this.roundStartTimer.start();
+        this.roundStartTimer.startRoundCountdown();
+        this.game.world.bringToTop(this.players);
+        this.game.world.bringToTop(this.roundStartTimer);
     }
     private setupArena() {
         this.arena = new Phaser.Circle(this.world.centerX, this.world.centerY, this.world.height);
@@ -50,9 +57,7 @@ export class Main extends Phaser.State {
         this.players.forEach(player => {
             this.game.physics.p2.enable(player, false);
             let playerCollisionGroup = this.game.physics.p2.createCollisionGroup();
-
             player.body.setCircle(CONFIG.PLAYER_COLLISION_SIZE);
-
             player.body.setCollisionGroup(playerCollisionGroup);
             playerCollisionGroups.push(playerCollisionGroup);
         }, this);
@@ -93,23 +98,23 @@ export class Main extends Phaser.State {
                 this.playerDied(player);
             }
         }, this);
-        let player = <Player>this.players.getChildAt(0);
-        if (this.cursors.left.isDown) {
-            player.body.velocity.x -= 5;
-        }
-        else if (this.cursors.right.isDown) {
-            player.body.velocity.x += 5;
-        }
+        if (!this.controlledPlayer.locked) {
+            if (this.cursors.left.isDown) {
+                this.controlledPlayer.body.velocity.x -= 5;
+            }
+            else if (this.cursors.right.isDown) {
+                this.controlledPlayer.body.velocity.x += 5;
+            }
 
-        if (this.cursors.up.isDown) {
-            player.body.velocity.y -= 5;
-        }
-        else if (this.cursors.down.isDown) {
-            player.body.velocity.y += 5;
+            if (this.cursors.up.isDown) {
+                this.controlledPlayer.body.velocity.y -= 5;
+            }
+            else if (this.cursors.down.isDown) {
+                this.controlledPlayer.body.velocity.y += 5;
+            }
         }
     }
     private playerDied(player: Player) {
-
         player.kill();
         if (this.players.countLiving() === 1) {
             this.roundEnded();
@@ -133,9 +138,10 @@ export class Main extends Phaser.State {
     private nextRound() {
 
         ++this.currentRound;
+        this.roundStartTimer.startRoundCountdown();
         this.players.callAll("revive", null);
     }
-    playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
+    private playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
 
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;
     }
