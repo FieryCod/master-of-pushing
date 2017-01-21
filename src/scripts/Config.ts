@@ -17,6 +17,7 @@ const STROKE_ACTIVE_COLOR: string = "#FF0000";
 const STROKE_INACTIVE_COLOR: string = "#000000";
 const MUSIC: Array<string> = ["music0.mp3"];
 const ROUND_START_SECONDS: number = 3;
+
 const TEXT_OPTIONS: TextOptionsObject = {
     font: `${BASIC_FONT_SIZE}pt ${BASIC_FONT}`,
     fill: BASIC_TEXT_COLOR,
@@ -81,7 +82,7 @@ interface CONFIG {
     readonly SMALLER_TEXT_OPTIONS: TextOptionsObject;
     readonly ROUND_START_SECONDS: number;
 }
-interface TextOptionsObject {
+export interface TextOptionsObject {
     font?: string;
     fill?: string | number;
     align?: string;

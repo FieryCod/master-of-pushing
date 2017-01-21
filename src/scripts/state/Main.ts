@@ -64,13 +64,7 @@ export class Main extends Phaser.State {
         this.players.forEach(p => p.body.collides(playerCollisionGroups, this.playersCollideCallback), this);
     }
     private addPlayer(name: string) {
-        let player = new Player(this.game, this.arena.x, this.arena.y, CONFIG.PLAYER_SPRITESHEET);
-        player.name = name;
-        player.scale.set(2);
-        player.anchor.x = player.anchor.y = CONFIG.DEFAULT_ANCHOR;
-        player.smoothed = false;
-        player.animations.add(CONFIG.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
-        player.play(CONFIG.DEFAULT_ANIMATION_PLAYER);
+        let player = new Player(this.game, this.arena.x, this.arena.y, name, CONFIG.PLAYER_SPRITESHEET);
         this.players.add(player);
     }
     private assignStartPositionsToPlayers() {
