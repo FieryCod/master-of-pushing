@@ -1,7 +1,7 @@
 import { CONFIG } from "../Config";
 
 export class MenuOption {
-  
+
   private optionText: Phaser.Text;
   private optionFunction: Function;
   public x;
