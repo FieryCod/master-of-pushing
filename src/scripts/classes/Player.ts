@@ -20,6 +20,8 @@ export class Player extends Phaser.Sprite {
     }
     postionAtStart() {
         this.body.setZeroVelocity();
+        this.body.setZeroRotation();
+        this.body.angle = 0;
         this.body.x = this.startPosition.x;
         this.body.y = this.startPosition.y;
         this.play(CONFIG.DEFAULT_ANIMATION_PLAYER);

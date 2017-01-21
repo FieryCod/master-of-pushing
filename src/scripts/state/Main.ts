@@ -88,16 +88,20 @@ export class Main extends Phaser.State {
         if (!this.controlledPlayer.locked) {
             if (this.cursors.left.isDown) {
                 this.controlledPlayer.body.velocity.x -= 5;
+                this.controlledPlayer.body.angle = 90;
             }
             else if (this.cursors.right.isDown) {
                 this.controlledPlayer.body.velocity.x += 5;
+                this.controlledPlayer.body.angle = -90;
             }
 
             if (this.cursors.up.isDown) {
                 this.controlledPlayer.body.velocity.y -= 5;
+                this.controlledPlayer.body.angle = 180;
             }
             else if (this.cursors.down.isDown) {
                 this.controlledPlayer.body.velocity.y += 5;
+                this.controlledPlayer.body.angle = 0;
             }
         }
     }
