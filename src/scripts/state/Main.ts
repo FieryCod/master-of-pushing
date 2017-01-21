@@ -87,7 +87,7 @@ export class Main extends Phaser.State {
     public update() {
         this.players.forEachAlive(player => {
             if (!this.arena.contains(player.body.x, player.body.y)) {
-                this.playerDied(player);
+                player.kill();
             }
         }, this);
         if (this.space.isDown) {
@@ -111,8 +111,7 @@ export class Main extends Phaser.State {
             }
         }
     }
-    private playerDied(player: Player) {
-        player.kill();
+    private checkIfRoundEnded(player: Player) {
         if (this.players.countLiving() === 1) {
             this.roundEnded();
         }
