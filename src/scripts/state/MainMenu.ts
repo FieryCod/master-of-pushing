@@ -1,5 +1,5 @@
-import {Jukebox} from '../classes/Jukebox';
-import {Menu} from '../classes/Menu';
+import { Jukebox } from "../classes/Jukebox";
+import { Menu } from "../classes/Menu";
 
 export class MainMenu extends Phaser.State {
   private menu: Menu;
@@ -12,15 +12,15 @@ export class MainMenu extends Phaser.State {
     this.roundsIterator = 0;
   }
   create() {
-    this.menu.addOption('Start', () => {
-      this.game.state.start('main', true, false, this.rounds[this.roundsIterator]);
+    this.menu.addOption("Start", () => {
+      this.game.state.start("main", true, false, this.rounds[this.roundsIterator]);
     });
-    this.menu.addOption('Rounds: 2', () => {
+    this.menu.addOption("Rounds: 2", () => {
       this.menu.optionsArray[this.menu.currOption].changeText(
-          'ROUNDS: ' + this.rounds[this.increaseRounds()]);
+        "ROUNDS: " + this.rounds[this.increaseRounds()]);
     });
-    this.menu.addOption('Options', () => { this.game.state.start('options'); });
-    this.menu.addOption('Credits', () => { this.game.state.start('credits'); });
+    this.menu.addOption("Options", () => { this.game.state.start("options"); });
+    this.menu.addOption("Credits", () => { this.game.state.start("credits"); });
   }
   private increaseRounds(): number {
     if (this.roundsIterator >= this.rounds.length - 1) {
