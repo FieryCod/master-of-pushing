@@ -70,6 +70,7 @@ export class Main extends Phaser.State {
     }
     private addPlayer(name: string) {
         let player = new Player(this.game, this.arena.x, this.arena.y, name);
+        player.events.onKilled.add(this.checkIfRoundEnded, this, 0, player)
         this.players.add(player);
     }
     private assignStartPositionsToPlayers() {
@@ -112,7 +113,7 @@ export class Main extends Phaser.State {
         }
     }
     private checkIfRoundEnded(player: Player) {
-        if (this.players.countLiving() === 1) {
+        if (this.players.countLiving() <= 1) {
             this.roundEnded();
         }
     }

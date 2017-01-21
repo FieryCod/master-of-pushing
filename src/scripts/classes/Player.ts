@@ -37,7 +37,7 @@ export class Player extends Phaser.Sprite {
         this.body.dynamic = true;
         this.alpha = 1;
         this.scale.x = this.scale.y = ORIGINAL_SCALE;
-         this.postionAtStart();
+        this.postionAtStart();
         return <Player>super.revive(health);
     }
     public kill(): any {
