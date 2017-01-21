@@ -1,19 +1,23 @@
 import { CONFIG } from "../Config";
 
+const STARTING_POINTS = 0;
+const ORIGINAL_SCALE = 2;
+
 export class Player extends Phaser.Sprite {
     public startPosition: Phaser.Point;
     public lastTouchedBy: Player;
     public points: number;
     public locked: boolean;
     public name: string;
+    private originalScale;
 
     constructor(game: Phaser.Game, x: number, y: number, name: string, key: string) {
         super(game, x, y, key);
         this.startPosition = new Phaser.Point(x, y);
-        this.points = 0;
+        this.points = STARTING_POINTS;
         this.locked = true;
         this.name = name;
-        this.scale.set(2);
+        this.scale.set(ORIGINAL_SCALE);
         this.anchor.x = this.anchor.y = CONFIG.DEFAULT_ANCHOR;
         this.smoothed = false;
         this.animations.add(CONFIG.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
@@ -28,21 +32,24 @@ export class Player extends Phaser.Sprite {
     }
     revive(health?: number): Player {
         this.body.dynamic = true;
+        this.alpha = 1;
+        this.scale.x = this.scale.y = ORIGINAL_SCALE;
         this.postionAtStart();
         return <Player>super.revive(health);
     }
     public kill(): any {
+        this.alive = false;
+        this.body.dynamic = false;
+        this.locked = true;
         let tweenMove, tweenFade, tweenScale: Phaser.Tween;
         let velocityX = this.body.velocity.x, velocityY = this.body.velocity.y;
         let directionX = this.body.x + velocityX, directionY = this.body.y + velocityY;
-        this.alive = false;
-        this.locked = true;
-        this.body.dynamic = false;
         tweenMove = this.game.add.tween(this).to({ x: directionX, y: directionY }, 1000, Phaser.Easing.Linear.None, true);
         tweenScale = this.game.add.tween(this.scale).to({ x: 0.3, y: 0.3 }, 900, Phaser.Easing.Cubic.In, true, 100);
-        tweenScale.onComplete.addOnce(() => {
-            tweenFade = this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true);
-            super.kill();
+        tweenMove.onComplete.addOnce(() => {
+            this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true).onComplete.addOnce(() => {
+                return super.kill();
+            });
         });
     }
 }
