@@ -27,7 +27,22 @@ export class Player extends Phaser.Sprite {
         this.play(CONFIG.DEFAULT_ANIMATION_PLAYER);
     }
     revive(health?: number): Player {
+        this.body.dynamic = true;
         this.postionAtStart();
         return <Player>super.revive(health);
+    }
+    public kill(): any {
+        let tweenMove, tweenFade, tweenScale: Phaser.Tween;
+        let velocityX = this.body.velocity.x, velocityY = this.body.velocity.y;
+        let directionX = this.body.x + velocityX, directionY = this.body.y + velocityY;
+        this.alive = false;
+        this.locked = true;
+        this.body.dynamic = false;
+        tweenMove = this.game.add.tween(this).to({ x: directionX, y: directionY }, 1000, Phaser.Easing.Linear.None, true);
+        tweenScale = this.game.add.tween(this.scale).to({ x: 0.3, y: 0.3 }, 900, Phaser.Easing.Cubic.In, true, 100);
+        tweenScale.onComplete.addOnce(() => {
+            tweenFade = this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true);
+            super.kill();
+        });
     }
 }
