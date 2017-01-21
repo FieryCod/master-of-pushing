@@ -18,6 +18,10 @@ const STROKE_INACTIVE_COLOR: string = "#000000";
 const MUSIC: Array<string> = ["music0.mp3"];
 const ROUND_START_SECONDS: number = 3;
 
+// WEAPONS
+const WEAPON_BOMB = "bomb";
+//
+
 const TEXT_OPTIONS: TextOptionsObject = {
     font: `${BASIC_FONT_SIZE}pt ${BASIC_FONT}`,
     fill: BASIC_TEXT_COLOR,
@@ -41,6 +45,7 @@ export const CONFIG: CONFIG = {
     TITLE_FONT_SIZE,
     GAME_BACKGROUND_COLOR,
     PLAYER_SPRITESHEET,
+    WEAPON_BOMB,
     TITLE,
     MUSIC,
     STROKE_ACTIVE_COLOR,
@@ -62,6 +67,7 @@ interface CONFIG {
 
     readonly GAME_BACKGROUND_COLOR: string;
     readonly PLAYER_SPRITESHEET: string;
+    readonly WEAPON_BOMB: string;
     readonly PLAYER_COLLISION_SIZE: number;
     readonly DEFAULT_ANIMATION_PLAYER: string;
     readonly START_POS_EDGE_OFFSET: number;

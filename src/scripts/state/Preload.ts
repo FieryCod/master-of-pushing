@@ -1,5 +1,5 @@
-import {CONFIG} from "../Config";
-import {Jukebox} from "../classes/Jukebox";
+import { CONFIG } from "../Config";
+import { Jukebox } from "../classes/Jukebox";
 
 export class Preload extends Phaser.State {
     private preloadBar: Phaser.Text;
@@ -11,6 +11,7 @@ export class Preload extends Phaser.State {
         this.game.load.onFileComplete.add(this.updateProgress, this);
         this.game.load.onLoadComplete.add(this.loadComplete, this);
         this.game.load.spritesheet(CONFIG.PLAYER_SPRITESHEET, `assets/sprites/${CONFIG.PLAYER_SPRITESHEET}.png`, 32, 32);
+        this.game.load.spritesheet(CONFIG.WEAPON_BOMB, `assets/sprites/${CONFIG.WEAPON_BOMB}.png`, 32, 32);
         this.game.load.bitmapFont(CONFIG.TITLE_FONT, `assets/fonts/bitmapFonts/${CONFIG.TITLE_FONT}.png`, `assets/fonts/bitmapFonts/${CONFIG.TITLE_FONT}.xml`);
         Jukebox.createJukebox(this.game);
         let musicName: string;
