@@ -1,12 +1,14 @@
 import { CONFIG } from "../Config";
 
 export class MenuOption {
+  
   private optionText: Phaser.Text;
   private optionFunction: Function;
   public x;
   public y;
 
   constructor(game: Phaser.Game, text: string, optionCount: number, callback: Function, isBack?: boolean, isPrimal?: boolean) {
+
     this.x = isBack ? game.world.centerX - 350 : game.world.centerX;
     this.y = isBack ? 200 : (optionCount * 80) + 300;
 

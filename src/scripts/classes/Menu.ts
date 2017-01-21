@@ -36,8 +36,11 @@ export class Menu {
 
     this.currOption += optionNumber;
 
-    if ((this.currOption < 0) || (this.currOption >= this.optionsArray.length)) {
+    if ((this.currOption >= this.optionsArray.length)) {
       this.currOption = 0;
+    }
+    if (this.currOption < 0){
+      this.currOption = this.optionsArray.length - 1;
     }
   }
   private toggleFullscreen(): void {
