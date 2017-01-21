@@ -1,4 +1,5 @@
 import { CONFIG } from "../Config";
+import { WeaponManager } from "./Weapons/WeaponManager";
 
 const STARTING_POINTS = 0;
 const ORIGINAL_SCALE = 2;
@@ -10,9 +11,10 @@ export class Player extends Phaser.Sprite {
     public locked: boolean;
     public name: string;
     private originalScale;
+    public weaponName: string;
 
-    constructor(game: Phaser.Game, x: number, y: number, name: string, key: string) {
-        super(game, x, y, key);
+    constructor(game: Phaser.Game, x: number, y: number, name: string) {
+        super(game, x, y, CONFIG.PLAYER_SPRITESHEET);
         this.startPosition = new Phaser.Point(x, y);
         this.points = STARTING_POINTS;
         this.locked = true;
@@ -21,8 +23,9 @@ export class Player extends Phaser.Sprite {
         this.anchor.x = this.anchor.y = CONFIG.DEFAULT_ANCHOR;
         this.smoothed = false;
         this.animations.add(CONFIG.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
+        this.weaponName = CONFIG.WEAPON_BOMB;
     }
-    postionAtStart() {
+    public postionAtStart() {
         this.body.setZeroVelocity();
         this.body.setZeroRotation();
         this.body.angle = 0;
@@ -34,7 +37,7 @@ export class Player extends Phaser.Sprite {
         this.body.dynamic = true;
         this.alpha = 1;
         this.scale.x = this.scale.y = ORIGINAL_SCALE;
-        this.postionAtStart();
+         this.postionAtStart();
         return <Player>super.revive(health);
     }
     public kill(): any {

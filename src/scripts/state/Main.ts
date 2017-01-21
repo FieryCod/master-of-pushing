@@ -1,5 +1,6 @@
 import { RoundStartTimer } from "../classes/RoundStartTimer";
 import { Player } from "../classes/Player";
+import { WeaponManager } from "../classes/Weapons/WeaponManager";
 import { CONFIG } from "../Config";
 
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
@@ -16,16 +17,20 @@ export class Main extends Phaser.State {
     private graphics: Phaser.Graphics;
     private winningText: string;
     private roundStartTimer: RoundStartTimer;
+    private space: Phaser.Key;
+    private weaponManager: WeaponManager;
 
-    init(rounds: number) {
+    public init(rounds: number) {
         this.rounds = rounds || 2;
         this.currentRound = 0;
         this.players = new Phaser.Group(this.game);
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.roundStartTimer = new RoundStartTimer(this.game, this.players);
         this.game.time.add(this.roundStartTimer);
+        this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.weaponManager = new WeaponManager(this.game);
     }
-    create() {
+    public create() {
         this.setupArena();
         this.addPlayer("Player1");
         this.addPlayer("Player2");
@@ -64,8 +69,7 @@ export class Main extends Phaser.State {
         this.players.forEach(p => p.body.collides(playerCollisionGroups, this.playersCollideCallback), this);
     }
     private addPlayer(name: string) {
-        let player = new Player(this.game, this.arena.x, this.arena.y, name, CONFIG.PLAYER_SPRITESHEET);
-        player.events.onKilled.add(this.checkIfRoundEnded, this, 0, player);
+        let player = new Player(this.game, this.arena.x, this.arena.y, name);
         this.players.add(player);
     }
     private assignStartPositionsToPlayers() {
@@ -80,18 +84,20 @@ export class Main extends Phaser.State {
             player.body.y = player.startPosition.y = this.arena.y + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
         }
     };
-    update() {
+    public update() {
         this.players.forEachAlive(player => {
             if (!this.arena.contains(player.body.x, player.body.y)) {
                 player.kill();
             }
         }, this);
+        if (this.space.isDown) {
+            this.weaponManager.use(this.controlledPlayer);
+        }
         if (!this.controlledPlayer.locked) {
             if (this.cursors.left.isDown) {
                 this.controlledPlayer.body.velocity.x -= 5;
                 this.controlledPlayer.body.angle = 90;
-            }
-            else if (this.cursors.right.isDown) {
+            } else if (this.cursors.right.isDown) {
                 this.controlledPlayer.body.velocity.x += 5;
                 this.controlledPlayer.body.angle = -90;
             }
@@ -99,8 +105,7 @@ export class Main extends Phaser.State {
             if (this.cursors.up.isDown) {
                 this.controlledPlayer.body.velocity.y -= 5;
                 this.controlledPlayer.body.angle = 180;
-            }
-            else if (this.cursors.down.isDown) {
+            } else if (this.cursors.down.isDown) {
                 this.controlledPlayer.body.velocity.y += 5;
                 this.controlledPlayer.body.angle = 0;
             }
@@ -131,7 +136,6 @@ export class Main extends Phaser.State {
             this.players.callAll("revive", null);
     }
     private playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
-
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;
     }
     private showGameResults() {
