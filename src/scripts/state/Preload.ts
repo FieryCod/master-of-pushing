@@ -6,14 +6,13 @@ export class Preload extends Phaser.State {
     private loadingPercentage: number = 0;
 
     preload() {
-
+        Jukebox.createJukebox(this.game);
         this.game.load.onLoadStart.add(this.loadStart, this);
         this.game.load.onFileComplete.add(this.updateProgress, this);
         this.game.load.onLoadComplete.add(this.loadComplete, this);
         this.game.load.spritesheet(CONFIG.PLAYER_SPRITESHEET, `assets/sprites/${CONFIG.PLAYER_SPRITESHEET}.png`, 32, 32);
         this.game.load.spritesheet(CONFIG.WEAPON_BOMB, `assets/sprites/${CONFIG.WEAPON_BOMB}.png`, 32, 32);
         this.game.load.bitmapFont(CONFIG.TITLE_FONT, `assets/fonts/bitmapFonts/${CONFIG.TITLE_FONT}.png`, `assets/fonts/bitmapFonts/${CONFIG.TITLE_FONT}.xml`);
-        Jukebox.createJukebox(this.game);
         let musicName: string;
         for (let music of CONFIG.MUSIC) {
             musicName = music.substring(0, music.indexOf("."));
@@ -25,7 +24,6 @@ export class Preload extends Phaser.State {
             let musicName = music.substring(0, music.indexOf("."));
             Jukebox.addMusic(musicName);
         }
-        this.game.sound.onSoundDecode.add(Jukebox.startMusic, this);
         this.game.state.start("menu");
     }
     loadStart() {

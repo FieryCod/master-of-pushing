@@ -12,6 +12,7 @@ export class MainMenu extends Phaser.State {
     this.roundsIterator = 0;
   }
   create() {
+    Jukebox.startMusic();
     this.menu.addOption("Start", () => {
       this.game.state.start("main", true, false, this.rounds[this.roundsIterator]);
     });
