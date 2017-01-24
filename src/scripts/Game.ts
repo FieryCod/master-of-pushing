@@ -1,6 +1,7 @@
 /// <reference path="../../node_modules/phaser/typescript/pixi.d.ts" />
 /// <reference path="../../node_modules/phaser/typescript/p2.d.ts" />
 /// <reference path="../../node_modules/phaser/typescript/phaser.d.ts" />
+/// <reference path="../../node_modules/airconsole-typescript/airconsole-typescript.d.ts" />
 import {Boot} from "./state/Boot";
 import {Main} from "./state/Main";
 import {Preload} from "./state/Preload";

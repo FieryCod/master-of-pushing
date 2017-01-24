@@ -19,6 +19,7 @@
     "@types/gulp-typescript": "0.0.32",
     "@types/gulp-uglify": "0.0.29",
     "@types/run-sequence": "0.0.28",
+    "@types/airconsole-typescript" : "git://github.com/FieryCod/airconsole-typescript.git",
     "browserify": "13.3.0",
     "del": "2.2.2",
     "gulp": "3.9.1",
