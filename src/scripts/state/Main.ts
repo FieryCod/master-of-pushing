@@ -1,5 +1,7 @@
 import { RoundStartTimer } from "../classes/RoundStartTimer";
+import { GameTimer } from "../classes/GameTimer";
 import { Player } from "../classes/Player";
+import { Arena } from "../classes/Arena";
 import { WeaponManager } from "../classes/Weapons/WeaponManager";
 import { CONFIG } from "../Config";
 
@@ -13,26 +15,27 @@ export class Main extends Phaser.State {
     private players: Phaser.Group;
     private controlledPlayer: Player;
     private cursors: Phaser.CursorKeys;
-    private arena: Phaser.Circle;
-    private graphics: Phaser.Graphics;
+    private arena: Arena;
     private winningText: string;
     private roundStartTimer: RoundStartTimer;
+    private gameTimer: GameTimer;
     private space: Phaser.Key;
     private weaponManager: WeaponManager;
 
     public init(rounds: number) {
-        this.AirConsole = new AirConsole();
         this.rounds = rounds || 2;
         this.currentRound = 0;
         this.players = new Phaser.Group(this.game);
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.roundStartTimer = new RoundStartTimer(this.game, this.players);
+        this.arena = new Arena(this.game, this.world.centerX, this.world.centerY, this.world.height - 100);
+        this.gameTimer = new GameTimer(this.game, this.arena, this.world.centerX, 60);
         this.game.time.add(this.roundStartTimer);
+        this.game.time.add(this.gameTimer);
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.weaponManager = new WeaponManager(this.game);
     }
     public create() {
-        this.setupArena();
         this.addPlayer("Player1");
         this.addPlayer("Player2");
         this.addPlayer("Player3");
@@ -44,16 +47,10 @@ export class Main extends Phaser.State {
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
         this.roundStartTimer.start();
+        this.gameTimer.start();
+        // TODO: arena is drawn second time here with reset method
         this.nextRound();
         this.game.world.bringToTop(this.players);
-    }
-    private setupArena() {
-        this.arena = new Phaser.Circle(this.world.centerX, this.world.centerY, this.world.height);
-        // TODO: Replace temp graphic for arena
-        this.graphics = this.game.add.graphics(0, 0);
-        this.graphics.beginFill(TEMP_ARENA_COLOR, 1);
-        this.graphics.drawCircle(this.world.centerX, this.world.centerY, this.arena.diameter);
-        // --
     }
     private initPhysics(): void {
         let playerCollisionGroups = [];
@@ -71,7 +68,7 @@ export class Main extends Phaser.State {
     }
     private addPlayer(name: string) {
         let player = new Player(this.game, this.arena.x, this.arena.y, name);
-        player.events.onKilled.add(this.checkIfRoundEnded, this, 0, player)
+        player.events.onKilled.add(this.checkIfRoundEnded, this, 0, player);
         this.players.add(player);
     }
     private assignStartPositionsToPlayers() {
@@ -82,13 +79,13 @@ export class Main extends Phaser.State {
         for (let i = 0; i < positions; ++i) {
             angle = i * degreesOffset;
             player = this.players.getChildAt(i) as Player;
-            player.body.x = player.startPosition.x = this.arena.x + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
-            player.body.y = player.startPosition.y = this.arena.y + (this.arena.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
+            player.body.x = player.startPosition.x = this.arena.x + (this.arena.collision.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
+            player.body.y = player.startPosition.y = this.arena.y + (this.arena.collision.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
         }
     };
     public update() {
         this.players.forEachAlive(player => {
-            if (!this.arena.contains(player.body.x, player.body.y)) {
+            if (!this.arena.collision.contains(player.body.x, player.body.y)) {
                 player.kill();
             }
         }, this);
@@ -120,7 +117,9 @@ export class Main extends Phaser.State {
     }
     private roundEnded() {
         let roundSurvivor = this.players.getFirstAlive();
-        ++roundSurvivor.points;
+        if (roundSurvivor) {
+            ++roundSurvivor.points;
+        }
         if (this.currentRound >= this.rounds) {
             // TODO: Finish game and redirect to score screen;
             this.showGameResults();
@@ -129,10 +128,11 @@ export class Main extends Phaser.State {
         }
     }
     private killAll() {
-        this.players.forEachAlive(player => player.kill(), this);
+        this.players.callAll("kill", null);
     }
     private nextRound() {
         ++this.currentRound;
+        this.arena.reset();
         this.roundStartTimer.startRoundCountdown();
         if (this.players.countDead())
             this.players.callAll("revive", null);
@@ -141,16 +141,5 @@ export class Main extends Phaser.State {
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;
     }
     private showGameResults() {
-        this.killAll();
-        let delayTween = 1000;
-        let duration = 3000;
-        let rect = this.graphics.drawRect(0, 0, this.world.width, this.world.height);
-        let text = this.game.add.text(this.game.world.centerX, 300, this.winningText, CONFIG.TEXT_OPTIONS);
-        text.anchor.set(CONFIG.DEFAULT_ANCHOR);
-        text.alpha = 0;
-        rect.alpha = 0;
-        this.game.add.tween(text).to({ alpha: 1 }, duration, Phaser.Easing.Linear.None, true, delayTween, 0, false);
-        this.game.add.tween(rect).to({ alpha: 1 }, duration, Phaser.Easing.Linear.None, true, delayTween, 0, false);
-        this.game.world.bringToTop(text);
     }
 }

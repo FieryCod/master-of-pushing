@@ -15,7 +15,7 @@ const INACTIVE_TEXT_COLOR: number | string = "#FFFFFF";
 const DEFAULT_ANCHOR: number = 0.5;
 const STROKE_ACTIVE_COLOR: string = "#FF0000";
 const STROKE_INACTIVE_COLOR: string = "#000000";
-const MUSIC: Array<string> = ["snowball_ambush.mp3"];
+const MUSIC: Array<string> = ["snowball-ambush.mp3"];
 const ROUND_START_SECONDS: number = 3;
 
 // WEAPONS
