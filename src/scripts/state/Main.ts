@@ -85,7 +85,7 @@ export class Main extends Phaser.State {
     };
     public update() {
         this.players.forEachAlive(player => {
-            if (!this.arena.collision.contains(player.body.x, player.body.y)) {
+            if (!player.fellOffArena && !this.arena.collision.contains(player.body.x, player.body.y)) {
                 player.kill();
             }
         }, this);
