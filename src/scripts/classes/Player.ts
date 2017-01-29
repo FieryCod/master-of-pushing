@@ -12,12 +12,14 @@ export class Player extends Phaser.Sprite {
     public name: string;
     private originalScale;
     public weaponName: string;
+    public fellOffArena: boolean;
 
     constructor(game: Phaser.Game, x: number, y: number, name: string) {
         super(game, x, y, CONFIG.PLAYER_SPRITESHEET);
         this.startPosition = new Phaser.Point(x, y);
         this.points = STARTING_POINTS;
         this.locked = true;
+        this.fellOffArena = false;
         this.name = name;
         this.scale.set(ORIGINAL_SCALE);
         this.anchor.x = this.anchor.y = CONFIG.DEFAULT_ANCHOR;
@@ -34,6 +36,7 @@ export class Player extends Phaser.Sprite {
         this.play(CONFIG.DEFAULT_ANIMATION_PLAYER);
     }
     revive(health?: number): Player {
+        this.fellOffArena = false;
         this.body.dynamic = true;
         this.alpha = 1;
         this.scale.x = this.scale.y = ORIGINAL_SCALE;
@@ -41,7 +44,7 @@ export class Player extends Phaser.Sprite {
         return <Player>super.revive(health);
     }
     public kill(): any {
-        this.alive = false;
+        this.fellOffArena = true;
         this.body.dynamic = false;
         this.locked = true;
         let tweenMove, tweenFade, tweenScale: Phaser.Tween;
