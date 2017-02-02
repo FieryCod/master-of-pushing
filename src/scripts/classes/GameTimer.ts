@@ -32,7 +32,7 @@ export class GameTimer extends Phaser.Timer {
     }
     private dangerTimeStart(): void {
         this.countdownText.alpha = 0;
-        this.countdownText.addColor("#FF0000", 0);
+        this.countdownText.addColor(CONFIG.DANGER_TEXT_COLOR, 0);
         this.dangerTween.start();
     }
     private increasePhase() {
@@ -64,7 +64,7 @@ export class GameTimer extends Phaser.Timer {
         this.timerEvent = this.loop(Phaser.Timer.SECOND, this.tick, this);
     }
     private resetTweenEvent(): void {
-        this.countdownText.addColor("#FFFFFF", 0);
+        this.countdownText.addColor(CONFIG.BASIC_TEXT_COLOR, 0);
         this.countdownText.alpha = 1;
         this.dangerEvent = this.add(this.dangerTime * 1000, this.dangerTimeStart, this);
     }
