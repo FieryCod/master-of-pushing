@@ -58,10 +58,11 @@ export class GameTimer extends Phaser.Timer {
         }
     }
     public reset(): void {
+        this.stop(false);
         this.currentTime = GAME_TIME;
-        this.removeAll();
+        this.remove(this.dangerEvent);
         this.resetTweenEvent();
-        this.timerEvent = this.loop(Phaser.Timer.SECOND, this.tick, this);
+        this.setCountdownText(this.currentTime);
     }
     private resetTweenEvent(): void {
         this.countdownText.addColor(CONFIG.BASIC_TEXT_COLOR, 0);

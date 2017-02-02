@@ -48,8 +48,9 @@ export class Main extends Phaser.State {
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
         this.roundStartTimer.start();
+        this.roundStartTimer.startRoundCountdown();
         // TODO: arena is drawn second time here with reset method
-        this.nextRound();
+        // this.nextRound();
 
         this.game.world.bringToTop(this.players);
     }
