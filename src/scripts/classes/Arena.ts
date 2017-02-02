@@ -16,7 +16,7 @@ export class Arena {
         this.y = y;
         this.diameter = this.startDiameter = diameter;
         this.collision = new Phaser.Circle(x, y, diameter);
-        this.arenaGraphics = game.add.graphics(0,0);
+        this.arenaGraphics = game.add.graphics(0, 0);
         this.arenaGraphics.beginFill(ARENA_BASIC_COLOR, 1);
         this.arenaGraphics.drawCircle(x, y, diameter);
     }

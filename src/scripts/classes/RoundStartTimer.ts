@@ -1,5 +1,6 @@
 import { CONFIG } from "../Config";
 
+// FIXME: IMO LEPIEJ TO JEDNAK W CONFIG ZROBIC
 const FONT: String = "64px Arial";
 const FONT_FILL_COLOR: String = "#ffffff";
 const TEXT_ALIGN: String = "center";
@@ -10,9 +11,12 @@ export class RoundStartTimer extends Phaser.Timer {
     private counterText: Phaser.Text;
     private players: Phaser.Group;
     private timerEvent: Phaser.TimerEvent;
+    public onRoundStart: Phaser.Signal;
+
     constructor(game: Phaser.Game, players: Phaser.Group) {
         super(game, false);
         this.players = players;
+        this.onRoundStart = new Phaser.Signal();
     }
     public startRoundCountdown(): void {
         this.players.setAll("locked", true);
@@ -25,6 +29,7 @@ export class RoundStartTimer extends Phaser.Timer {
     private tick(): void {
         this.counterText.setText((--this.currentSecondToStart).toString());
         if (this.currentSecondToStart === 0) {
+            this.onRoundStart.dispatch();
             this.players.setAll("locked", false);
             this.counterText.destroy();
             this.remove(this.timerEvent);

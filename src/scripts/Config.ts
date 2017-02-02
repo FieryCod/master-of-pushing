@@ -17,7 +17,7 @@ const STROKE_ACTIVE_COLOR: string = "#FF0000";
 const STROKE_INACTIVE_COLOR: string = "#000000";
 const MUSIC: Array<string> = ["snowball-ambush.mp3"];
 const ROUND_START_SECONDS: number = 3;
-
+const DANGER_TEXT_COLOR: string = "#FF0000";
 // WEAPONS
 const WEAPON_BOMB = "bomb";
 //
@@ -48,6 +48,7 @@ export const CONFIG: CONFIG = {
     WEAPON_BOMB,
     TITLE,
     MUSIC,
+    DANGER_TEXT_COLOR,
     STROKE_ACTIVE_COLOR,
     STROKE_INACTIVE_COLOR,
     SMALLER_FONT_SIZE,
@@ -87,6 +88,7 @@ interface CONFIG {
     readonly TEXT_OPTIONS: TextOptionsObject;
     readonly SMALLER_TEXT_OPTIONS: TextOptionsObject;
     readonly ROUND_START_SECONDS: number;
+    readonly DANGER_TEXT_COLOR: string;
 }
 export interface TextOptionsObject {
     font?: string;

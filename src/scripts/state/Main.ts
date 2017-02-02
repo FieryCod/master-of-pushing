@@ -27,13 +27,14 @@ export class Main extends Phaser.State {
         this.currentRound = 0;
         this.players = new Phaser.Group(this.game);
         this.cursors = this.game.input.keyboard.createCursorKeys();
-        this.roundStartTimer = new RoundStartTimer(this.game, this.players);
         this.arena = new Arena(this.game, this.world.centerX, this.world.centerY, this.world.height - 100);
-        this.gameTimer = new GameTimer(this.game, this.arena, this.world.centerX, 60);
+        this.gameTimer = new GameTimer(this.game, this.arena, this.world.centerX, 35);
+        this.roundStartTimer = new RoundStartTimer(this.game, this.players);
         this.game.time.add(this.roundStartTimer);
         this.game.time.add(this.gameTimer);
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.weaponManager = new WeaponManager(this.game);
+        this.roundStartTimer.onRoundStart.add(this.gameTimer.start, this.gameTimer);
     }
     public create() {
         this.addPlayer("Player1");
@@ -47,9 +48,9 @@ export class Main extends Phaser.State {
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
         this.roundStartTimer.start();
-        this.gameTimer.start();
         // TODO: arena is drawn second time here with reset method
         this.nextRound();
+
         this.game.world.bringToTop(this.players);
     }
     private initPhysics(): void {
@@ -133,9 +134,11 @@ export class Main extends Phaser.State {
     private nextRound() {
         ++this.currentRound;
         this.arena.reset();
+        this.gameTimer.reset();
         this.roundStartTimer.startRoundCountdown();
-        if (this.players.countDead())
+        if (this.players.countDead()) {
             this.players.callAll("revive", null);
+        }
     }
     private playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;
