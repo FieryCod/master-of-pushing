@@ -37,6 +37,13 @@ const SMALLER_TEXT_OPTIONS: TextOptionsObject = {
     stroke: "rgba(0,0,0,0)",
     strokeThickness: 4,
 };
+const SCOREBOARD_TEXT_COLOR = {
+    font: `${13}pt ${BASIC_FONT}`,
+    fill: "",
+    align: "center",
+    stroke: "rgba(0,0,0,0)",
+    strokeThickness: 4,
+};
 export const CONFIG: CONFIG = {
     BASIC_TEXT_COLOR,
     BASIC_FONT,
@@ -61,6 +68,7 @@ export const CONFIG: CONFIG = {
     TEXT_OPTIONS,
     SMALLER_TEXT_OPTIONS,
     ROUND_START_SECONDS,
+    SCOREBOARD_TEXT_COLOR
 };
 
 
@@ -89,6 +97,7 @@ interface CONFIG {
     readonly SMALLER_TEXT_OPTIONS: TextOptionsObject;
     readonly ROUND_START_SECONDS: number;
     readonly DANGER_TEXT_COLOR: string;
+    SCOREBOARD_TEXT_COLOR: TextOptionsObject;
 }
 export interface TextOptionsObject {
     font?: string;

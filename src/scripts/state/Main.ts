@@ -4,6 +4,7 @@ import { Player } from "../classes/Player";
 import { Arena } from "../classes/Arena";
 import { WeaponManager } from "../classes/Weapons/WeaponManager";
 import { CONFIG } from "../Config";
+import { Scoreboard } from "../classes/Scoreboard";
 
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
@@ -13,6 +14,7 @@ export class Main extends Phaser.State {
     private rounds: number;
     private currentRound: number;
     private players: Phaser.Group;
+    private static numberOfPlayers: number = 0;
     private controlledPlayer: Player;
     private cursors: Phaser.CursorKeys;
     private arena: Arena;
@@ -21,8 +23,10 @@ export class Main extends Phaser.State {
     private gameTimer: GameTimer;
     private space: Phaser.Key;
     private weaponManager: WeaponManager;
+    private scoreboard: Scoreboard;
 
     public init(rounds: number) {
+        this.scoreboard = new Scoreboard(this.game);
         this.rounds = rounds || 2;
         this.currentRound = 0;
         this.players = new Phaser.Group(this.game);
@@ -37,22 +41,22 @@ export class Main extends Phaser.State {
         this.roundStartTimer.onRoundStart.add(this.gameTimer.start, this.gameTimer);
     }
     public create() {
-        this.addPlayer("Player1");
-        this.addPlayer("Player2");
-        this.addPlayer("Player3");
-        this.addPlayer("Player4");
-        this.addPlayer("Player5");
-        this.addPlayer("Player6");
+        this.addPlayer("TOMIX", "#F00F00");
+        this.addPlayer("DYRDA", "#F0000F");
+        this.addPlayer("BUBIX", "#FF0F0F");
+        this.addPlayer("WOJTAS", "#FFF000");
+        this.addPlayer("KAROLIX", "#FF00F0");
+        this.addPlayer("PAWEŁ", "#FF00FF");
+
         this.controlledPlayer = <Player>this.players.getChildAt(0);
         this.initPhysics();
         this.assignStartPositionsToPlayers();
         this.players.callAll("postionAtStart", null);
         this.roundStartTimer.start();
         this.roundStartTimer.startRoundCountdown();
-        // TODO: arena is drawn second time here with reset method
-        // this.nextRound();
-
+        ++this.currentRound;
         this.game.world.bringToTop(this.players);
+        this.scoreboard.drawScoreboard();
     }
     private initPhysics(): void {
         let playerCollisionGroups = [];
@@ -68,10 +72,11 @@ export class Main extends Phaser.State {
 
         this.players.forEach(p => p.body.collides(playerCollisionGroups, this.playersCollideCallback), this);
     }
-    private addPlayer(name: string) {
-        let player = new Player(this.game, this.arena.x, this.arena.y, name);
+    private addPlayer(name: string, playerColor: string) {
+        let player = new Player(this.game, this.arena.x, this.arena.y, name, playerColor, Main.numberOfPlayers++);
         player.events.onKilled.add(this.checkIfRoundEnded, this, 0, player);
         this.players.add(player);
+        this.scoreboard.addPlayerToScoreboard(name, playerColor);
     }
     private assignStartPositionsToPlayers() {
         let positions: number = this.players.length;
@@ -118,11 +123,13 @@ export class Main extends Phaser.State {
         }
     }
     private roundEnded() {
-        let roundSurvivor = this.players.getFirstAlive();
+        let roundSurvivor: Player = this.players.getFirstAlive();
         if (roundSurvivor) {
-            ++roundSurvivor.points;
+            // ++roundSurvivor.scores; // TODO:: Better to use a function which will increment internal player scores
+            this.scoreboard.updateInfo(roundSurvivor.playerIndex)
         }
         if (this.currentRound >= this.rounds) {
+            // for(let i in this.players.get)
             // TODO: Finish game and redirect to score screen;
             this.showGameResults();
         } else {
