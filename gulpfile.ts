@@ -12,7 +12,8 @@ let open = require("gulp-open");
 let browserify = require("browserify");
 let tsify = require("tsify");
 let source = require("vinyl-source-stream");
-let plumber = require("gulp-plumber");
+let chalk = require("chalk");
+let block = false;
 
 const config = {
     styles: {
@@ -62,9 +63,15 @@ gulp.task("typescript", () => {
     })
         .plugin(tsify)
         .bundle()
-        .on("error", function (error) { console.error(error.toString()); })
+        .on("error", function (error) {
+            if (!block) {
+                console.log(chalk.yellow.bgBlue.bold("\nERRORS IN YOUR TYPESCRIPT CODE:"));
+            }
+            block = true;
+            console.error(chalk.red.bold(error.message.toString()));
+            this.emit("end");
+        })
         .pipe(source("main.js"))
-        .pipe(plumber())
         .pipe(gulp.dest(paths.build));
 });
 
@@ -85,10 +92,10 @@ gulp.task("processhtml", () => {
 
 
 gulp.task("reload", ["typescript"], () => {
+     block = false;
     gulp.src(paths.build + paths.index)
         .pipe(connect.reload());
 });
-
 
 
 gulp.task("connect", () => {
@@ -105,7 +112,7 @@ gulp.task("open", () => {
 });
 gulp.task("watch", () => {
     gulp.watch(paths.assets, ["copy"]);
-    gulp.watch(paths.ts, ["typescript", "reload"]);
+    gulp.watch(paths.ts, ["reload"]);
     gulp.watch(paths.scss, ["scss", "reload"]);
     gulp.watch(paths.index, ["reload"]);
 });
@@ -123,7 +130,7 @@ gulp.task("deploy", () => {
 });
 
 gulp.task("default", () => {
-    runSequence("clean", ["copy", "typescript", "scss", "connect", "watch"], "open");
+    runSequence("clean", ["copy", "reload", "scss", "connect", "watch"], "open");
 });
 gulp.task("build", () => {
     return runSequence("clean", ["copy", "minifyJs", "processhtml"]);

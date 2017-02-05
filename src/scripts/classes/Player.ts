@@ -1,23 +1,24 @@
 import { CONFIG } from "../Config";
 import { WeaponManager } from "./Weapons/WeaponManager";
 
-const STARTING_POINTS = 0;
+// const STARTING_SCORES = 0;
 const ORIGINAL_SCALE = 2;
-
 export class Player extends Phaser.Sprite {
+    public playerIndex: number;
     public startPosition: Phaser.Point;
     public lastTouchedBy: Player;
-    public points: number;
     public locked: boolean;
+    public playerColor: string;
     public name: string;
+
     private originalScale;
     public weaponName: string;
     public fellOffArena: boolean;
 
-    constructor(game: Phaser.Game, x: number, y: number, name: string) {
+    constructor(game: Phaser.Game, x: number, y: number, name: string, playerColor: string, playerIndex: number) {
         super(game, x, y, CONFIG.PLAYER_SPRITESHEET);
         this.startPosition = new Phaser.Point(x, y);
-        this.points = STARTING_POINTS;
+        this.playerIndex = playerIndex;
         this.locked = true;
         this.fellOffArena = false;
         this.name = name;
@@ -26,6 +27,7 @@ export class Player extends Phaser.Sprite {
         this.smoothed = false;
         this.animations.add(CONFIG.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
         this.weaponName = CONFIG.WEAPON_BOMB;
+        this.playerColor = playerColor;
     }
     public postionAtStart() {
         this.body.setZeroVelocity();
@@ -42,6 +44,7 @@ export class Player extends Phaser.Sprite {
         this.scale.x = this.scale.y = ORIGINAL_SCALE;
         this.postionAtStart();
         return <Player>super.revive(health);
+
     }
     public kill(): any {
         this.fellOffArena = true;
