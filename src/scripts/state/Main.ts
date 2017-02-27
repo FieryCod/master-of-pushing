@@ -74,7 +74,7 @@ export class Main extends Phaser.State {
     }
     private addPlayer(name: string, playerColor: string) {
         let player = new Player(this.game, this.arena.x, this.arena.y, name, playerColor, Main.numberOfPlayers++);
-        player.events.onKilled.add(this.checkIfRoundEnded, this, 0, player);
+        player.events.onKilled.add(this.isRoundEnd, this, 1);
         this.players.add(player);
         this.scoreboard.addPlayerToScoreboard(name, playerColor);
     }
@@ -117,36 +117,37 @@ export class Main extends Phaser.State {
             }
         }
     }
-    private checkIfRoundEnded(player: Player) {
+
+    private isRoundEnd(): void {
+       // FIXME: Bład #20 jest spowodowany tym, że nextRound jest wywoływane już gdy jest tylko jeden player wiec jezeli on szybko zginie to 
+       // i tak juz jest nowa runda. Aby to naprawić to albo trzeba sprawdzic bo np sekundzie czy dalej jest jeden zawodnik albo zapauzowac 
+       // lub w jakis sposob przewidziec czy spadnie
         if (this.players.countLiving() <= 1) {
-            this.roundEnded();
-        }
-    }
-    private roundEnded() {
-        let roundSurvivor: Player = this.players.getFirstAlive();
-        if (roundSurvivor) {
+            let roundSurvivor: Player = this.players.getFirstAlive();
             // ++roundSurvivor.scores; // TODO:: Better to use a function which will increment internal player scores
             this.scoreboard.updateInfo(roundSurvivor.playerIndex)
-        }
-        if (this.currentRound >= this.rounds) {
-            // for(let i in this.players.get)
-            // TODO: Finish game and redirect to score screen;
-            this.showGameResults();
-        } else {
-            this.nextRound();
+
+            if (this.currentRound >= this.rounds) {
+                // for(let i in this.players.get)
+                // TODO: Finish game and redirect to score screen;
+                this.showGameResults();
+            }
+            else{
+                this.nextRound();
+            } 
         }
     }
     private killAll() {
         this.players.callAll("kill", null);
     }
     private nextRound() {
+    
         ++this.currentRound;
         this.arena.reset();
         this.gameTimer.reset();
         this.roundStartTimer.startRoundCountdown();
-        if (this.players.countDead()) {
-            this.players.callAll("revive", null);
-        }
+        this.players.callAll("revive", null);
+
     }
     private playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {
         (<Player>playerBody1.sprite).lastTouchedBy = <Player>playerBody2.sprite;

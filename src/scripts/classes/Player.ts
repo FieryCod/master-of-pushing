@@ -7,10 +7,9 @@ export class Player extends Phaser.Sprite {
     public playerIndex: number;
     public startPosition: Phaser.Point;
     public lastTouchedBy: Player;
-    public locked: boolean;
+    public locked: boolean; // co to znaczy?
     public playerColor: string;
     public name: string;
-
     private originalScale;
     public weaponName: string;
     public fellOffArena: boolean;
@@ -47,18 +46,20 @@ export class Player extends Phaser.Sprite {
 
     }
     public kill(): any {
-        this.fellOffArena = true;
-        this.body.dynamic = false;
-        this.locked = true;
-        let tweenMove, tweenFade, tweenScale: Phaser.Tween;
-        let velocityX = this.body.velocity.x, velocityY = this.body.velocity.y;
-        let directionX = this.body.x + velocityX, directionY = this.body.y + velocityY;
-        tweenMove = this.game.add.tween(this).to({ x: directionX, y: directionY }, 1000, Phaser.Easing.Linear.None, true);
-        tweenScale = this.game.add.tween(this.scale).to({ x: 0.3, y: 0.3 }, 900, Phaser.Easing.Cubic.In, true, 100);
-        tweenMove.onComplete.addOnce(() => {
-            this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true).onComplete.addOnce(() => {
-                return super.kill();
+
+            this.fellOffArena = true;
+            this.body.dynamic = false;
+            this.locked = true;
+            let tweenMove, tweenFade, tweenScale: Phaser.Tween;
+            let velocityX = this.body.velocity.x, velocityY = this.body.velocity.y;
+            let directionX = this.body.x + velocityX, directionY = this.body.y + velocityY;
+            tweenMove = this.game.add.tween(this).to({ x: directionX, y: directionY }, 1000, Phaser.Easing.Linear.None, true);
+            tweenScale = this.game.add.tween(this.scale).to({ x: 0.3, y: 0.3 }, 900, Phaser.Easing.Cubic.In, true, 100);
+            tweenMove.onComplete.addOnce(() => {
+                this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true).onComplete.addOnce(() => {
+                    super.kill();
+                });
             });
-        });
+        
     }
 }

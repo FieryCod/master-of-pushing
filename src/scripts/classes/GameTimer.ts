@@ -5,6 +5,7 @@ import { Arena } from "../classes/Arena";
 const GAME_TIME: number = 30;
 const PERCENTAGE_OF_ARENA_REDUCE = 25;
 const ROUNDS_TIMES = [GAME_TIME, GAME_TIME - 5, GAME_TIME - 10];
+
 export class GameTimer extends Phaser.Timer {
     private timerEvent: Phaser.TimerEvent;
     private degreePerSecond: number;
