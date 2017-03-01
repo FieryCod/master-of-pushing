@@ -1,7 +1,7 @@
 import {Skill} from './Skill';
 import {Player} from "../Player";
 
-class Dash implements Skill {
+export class Dash implements Skill {
     private DASH_ID = 1;
 
     constructor() {
@@ -17,9 +17,9 @@ class Dash implements Skill {
     public name: string;
     public id: number;
 
-    public useSkill(player: Player) {
+    public useSkill(player: Player){
         this.onStart.dispatch();
-        player.body.applyImpulse(100, player.input.downPoint.x, player.input.downPoint.y);
+        player.body.applyImpulse([player.position.x + 1, player.position.y + 1], player.position.x, player.position.y);
         this.onComplete.dispatch();
     }
 }

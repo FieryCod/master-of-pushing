@@ -1,5 +1,8 @@
 import { CONFIG } from "../Config";
 import { WeaponManager } from "./Weapons/WeaponManager";
+import {Skill} from "./Skills/Skill";
+import {Dash} from "./Skills/Dash";
+import {_} from "lodash";
 
 // const STARTING_SCORES = 0;
 const ORIGINAL_SCALE = 2;
@@ -10,6 +13,7 @@ export class Player extends Phaser.Sprite {
     public locked: boolean;
     public playerColor: string;
     public name: string;
+    private skills: Skill[];
 
     private originalScale;
     public weaponName: string;
@@ -28,6 +32,7 @@ export class Player extends Phaser.Sprite {
         this.animations.add(CONFIG.DEFAULT_ANIMATION_PLAYER, [0, 1, 2, 3, 4, 5], 10, true);
         this.weaponName = CONFIG.WEAPON_BOMB;
         this.playerColor = playerColor;
+        this.skills = [new Dash()];
     }
     public postionAtStart() {
         this.body.setZeroVelocity();
@@ -60,5 +65,15 @@ export class Player extends Phaser.Sprite {
                 return super.kill();
             });
         });
+    }
+
+    public useSkill(skill: Skill): Skill {
+        let playerSkill = _.find(this.skills, function (item)
+        {
+            return item.id === skill.id;
+        });
+        if(playerSkill) {
+            return playerSkill.useSkill(this);
+        }
     }
 }

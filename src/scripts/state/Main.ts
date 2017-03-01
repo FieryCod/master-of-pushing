@@ -5,6 +5,7 @@ import { Arena } from "../classes/Arena";
 import { WeaponManager } from "../classes/Weapons/WeaponManager";
 import { CONFIG } from "../Config";
 import { Scoreboard } from "../classes/Scoreboard";
+import {Dash} from "../classes/Skills/Dash";
 
 const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
@@ -22,6 +23,7 @@ export class Main extends Phaser.State {
     private roundStartTimer: RoundStartTimer;
     private gameTimer: GameTimer;
     private space: Phaser.Key;
+    private dash: Phaser.Key;
     private weaponManager: WeaponManager;
     private scoreboard: Scoreboard;
 
@@ -37,6 +39,7 @@ export class Main extends Phaser.State {
         this.game.time.add(this.roundStartTimer);
         this.game.time.add(this.gameTimer);
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.dash =  this.game.input.keyboard.addKey(Phaser.Keyboard.D);
         this.weaponManager = new WeaponManager(this.game);
         this.roundStartTimer.onRoundStart.add(this.gameTimer.start, this.gameTimer);
     }
@@ -98,6 +101,9 @@ export class Main extends Phaser.State {
         }, this);
         if (this.space.isDown) {
             this.weaponManager.use(this.controlledPlayer);
+        }
+        if (this.dash.isDown) {
+            this.controlledPlayer.useSkill(new Dash());
         }
         if (!this.controlledPlayer.locked) {
             if (this.cursors.left.isDown) {
