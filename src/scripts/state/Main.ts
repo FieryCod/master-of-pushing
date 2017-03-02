@@ -18,7 +18,6 @@ export class Main extends Phaser.State {
     private controlledPlayer: Player;
     private cursors: Phaser.CursorKeys;
     private arena: Arena;
-    private winningText: string;
     private roundStartTimer: RoundStartTimer;
     private gameTimer: GameTimer;
     private space: Phaser.Key;
@@ -28,7 +27,7 @@ export class Main extends Phaser.State {
 
     public init(rounds: number) {
         this.scoreboard = new Scoreboard(this.game);
-        this.rounds = rounds || 2;
+        this.rounds = rounds || 3;
         this.currentRound = 1;
         this.onRoundEnd = new Phaser.Signal();
         this.players = new Phaser.Group(this.game);
@@ -43,12 +42,12 @@ export class Main extends Phaser.State {
         this.roundStartTimer.onRoundStart.add(this.gameTimer.start, this.gameTimer);
     }
     public create() {
-        this.addPlayer("TOMIX", "#F00F00");
-        this.addPlayer("DYRDA", "#F0000F");
-        this.addPlayer("BUBIX", "#FF0F0F");
-        this.addPlayer("WOJTAS", "#FFF000");
-        this.addPlayer("KAROLIX", "#FF00F0");
-        this.addPlayer("PAWEŁ", "#FF00FF");
+        this.addPlayer("Tome", "#F00F00");
+        this.addPlayer("Dirda", "#F0000F");
+        this.addPlayer("Bube", "#FF0F0F");
+        this.addPlayer("Wojte", "#FFF000");
+        this.addPlayer("Karole", "#FF00F0");
+        this.addPlayer("Pawele", "#FF00FF");
         this.onRoundEnd.add(() => {
             setTimeout(() => {
                 this.nextRound();
@@ -56,8 +55,8 @@ export class Main extends Phaser.State {
         }, this);
         this.initPhysics();
 
-        this.controlledPlayer = <Player>this.players.getChildAt(0); // tymczasowe
-        this.assignStartPositionsToPlayers();
+        this.controlledPlayer = <Player>this.players.getChildAt(0); 
+        this.arena.assignStartPositionsToPlayers(this.players);
         this.roundStartTimer.start();
         this.roundStartTimer.startRoundCountdown();
         this.game.world.bringToTop(this.players);
@@ -83,19 +82,7 @@ export class Main extends Phaser.State {
         this.players.add(player);
         this.scoreboard.addPlayerToScoreboard(name, playerColor);
     }
-    private assignStartPositionsToPlayers() {
-        let positions: number = this.players.length;
-        let degreesOffset: number = 360 / positions;
-        let angle: number;
-        let player: Player;
-        for (let i = 0; i < positions; ++i) {
-            angle = i * degreesOffset;
-            player = this.players.getChildAt(i) as Player;
-            player.body.x = player.startPosition.x = this.arena.x + (this.arena.collision.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.cos(angle * (Math.PI / 180));
-            player.body.y = player.startPosition.y = this.arena.y + (this.arena.collision.radius - CONFIG.START_POS_EDGE_OFFSET) * Math.sin(angle * (Math.PI / 180));
-        }
-        this.players.callAll("positionAtStart", null);
-    };
+
     public update() {
         this.players.forEachAlive(player => {
             if (!player.fellOffArena && !this.arena.collision.contains(player.body.x, player.body.y)) {
@@ -127,7 +114,7 @@ export class Main extends Phaser.State {
     private roundEnd(): void {
         if (this.players.countLiving() === 1) {
             let roundSurvivor: Player = this.players.getFirstAlive();
-            // ++roundSurvivor.scores; // TODO:: Better to use a function which will increment internal player scores
+            this.arena.showRoundWinner(roundSurvivor.name);
             this.scoreboard.updateInfo(roundSurvivor.playerIndex);
 
             if (this.currentRound >= this.rounds) {
@@ -143,15 +130,13 @@ export class Main extends Phaser.State {
     private killAll() {
         this.players.callAll("kill", null);
     }
-    private nextRound() {
+    private nextRound(): void {
         ++this.currentRound;
         this.arena.reset();
         this.gameTimer.reset();
+        this.arena.destroyWinnerText();
         this.roundStartTimer.startRoundCountdown();
         this.players.callAll("revive", null);
-
-    }
-    private showRoundWinner(winner) {
 
     }
     private playersCollideCallback(playerBody1: Phaser.Physics.P2.Body, playerBody2: Phaser.Physics.P2.Body) {

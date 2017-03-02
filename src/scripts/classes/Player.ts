@@ -7,7 +7,7 @@ export class Player extends Phaser.Sprite {
     public playerIndex: number;
     public startPosition: Phaser.Point;
     public lastTouchedBy: Player;
-    public locked: boolean; // co to znaczy?
+    public locked: boolean;
     public playerColor: string;
     public name: string;
     private originalScale;
