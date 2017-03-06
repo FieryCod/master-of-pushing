@@ -10,7 +10,6 @@ export class Player extends Phaser.Sprite {
     public locked: boolean;
     public playerColor: string;
     public name: string;
-
     private originalScale;
     public weaponName: string;
     public fellOffArena: boolean;
@@ -29,7 +28,7 @@ export class Player extends Phaser.Sprite {
         this.weaponName = CONFIG.WEAPON_BOMB;
         this.playerColor = playerColor;
     }
-    public postionAtStart() {
+    public positionAtStart() {
         this.body.setZeroVelocity();
         this.body.setZeroRotation();
         this.body.angle = 0;
@@ -42,23 +41,23 @@ export class Player extends Phaser.Sprite {
         this.body.dynamic = true;
         this.alpha = 1;
         this.scale.x = this.scale.y = ORIGINAL_SCALE;
-        this.postionAtStart();
+        this.positionAtStart();
         return <Player>super.revive(health);
 
     }
     public kill(): any {
-        this.fellOffArena = true;
-        this.body.dynamic = false;
-        this.locked = true;
-        let tweenMove, tweenFade, tweenScale: Phaser.Tween;
-        let velocityX = this.body.velocity.x, velocityY = this.body.velocity.y;
-        let directionX = this.body.x + velocityX, directionY = this.body.y + velocityY;
-        tweenMove = this.game.add.tween(this).to({ x: directionX, y: directionY }, 1000, Phaser.Easing.Linear.None, true);
-        tweenScale = this.game.add.tween(this.scale).to({ x: 0.3, y: 0.3 }, 900, Phaser.Easing.Cubic.In, true, 100);
-        tweenMove.onComplete.addOnce(() => {
-            this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true).onComplete.addOnce(() => {
-                return super.kill();
+
+            this.fellOffArena = true;
+            this.body.dynamic = false;
+            this.locked = true;
+            let tweenMove, tweenFade, tweenScale: Phaser.Tween;
+            let directionX = this.body.x + this.body.velocityX, directionY = this.body.y + this.body.velocityY;
+            tweenMove = this.game.add.tween(this).to({ x: directionX, y: directionY }, 1000, Phaser.Easing.Linear.None, true);
+            tweenScale = this.game.add.tween(this.scale).to({ x: 0.3, y: 0.3 }, 900, Phaser.Easing.Cubic.In, true, 100);
+            tweenMove.onComplete.addOnce(() => {
+                this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true).onComplete.addOnce(() => {
+                    super.kill();
+                });
             });
-        });
     }
 }
