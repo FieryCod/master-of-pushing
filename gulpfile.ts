@@ -18,8 +18,7 @@ let block = false;
 const config = {
     styles: {
         sass: {
-            style: { outputStyle: "expanded" },
-            src: "public/stylesheets/*.scss",
+            outputStyle: "expanded"
         },
         prefixer: {
             browsers: ["last 10 versions"],
@@ -91,8 +90,8 @@ gulp.task("processhtml", () => {
 });
 
 
-gulp.task("reload", ["typescript"], () => {
-     block = false;
+gulp.task("reload", () => {
+    block = false;
     gulp.src(paths.build + paths.index)
         .pipe(connect.reload());
 });
@@ -116,7 +115,7 @@ gulp.task("watch", () => {
     gulp.watch(paths.scss, ["scss", "reload"]);
     gulp.watch(paths.index, ["reload"]);
 });
-gulp.task("minifyJs", ["typescript"], () => {
+gulp.task("minifyJs", () => {
     let all = [].concat(paths.build + "/main.js");
     return gulp.src(all)
         .pipe(uglifyjs("all.min.js", { outSourceMap: false }))

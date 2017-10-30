@@ -10,7 +10,6 @@ const TEMP_ARENA_COLOR: number = 0xadd8e6;
 
 // FIXME: Arena should be responsive
 export class Main extends Phaser.State {
-    private AirConsole: AirConsole;
     private rounds: number;
     private currentRound: number;
     private players: Phaser.Group;
