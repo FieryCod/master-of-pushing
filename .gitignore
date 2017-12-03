@@ -1,13 +1,16 @@
-.DS_Store
-*.db
-node_modules/
-vendor/
-.idea/
-.vscode/
-*.iml
-build/
-dist/
+# IntelliJ
+.idea
 
-# Exclude generated scripts
-src/scripts/**/*.js
-src/scripts/**/*.js.map
+# Node.js
+node_modules
+
+# Game
+dist
+builds
+
+# OSX
+.DS_Store
+
+# Visual Studio
+.vs
+.vscode
